@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2017. Xi'an iRain IOT Technology service CO., Ltd (ShenZhen). All Rights Reserved.
+  -->
+
+<resources>
+    <color name="pwk_keyboard_divider">#CCC</color>
+    <color name="pwk_keyboard_background">#E9E9E9</color>
+
+    <color name="pwk_text_color">@android:color/black</color>
+    <color name="pwk_border_gray">#d8d8d8</color>
+
+    <color name="pwk_key_pressed_bubble_text">@color/pwk_primary_color</color>
+
+    <color name="pwk_key_pressed_gray">#CECECE</color>
+
+    <!--兼容属性-->
+    <color name="pwk_keyboard_primary_color">#418AF9</color>
+    <color name="pwk_keyboard_primary_dark_color">#3A7CE0</color>
+
+    <!--定义键盘组件的颜色-->
+    <color name="pwk_primary_color">@color/pwk_keyboard_primary_color</color>
+    <color name="pwk_primary_dark_color">@color/pwk_keyboard_primary_dark_color</color>
+
+</resources>
