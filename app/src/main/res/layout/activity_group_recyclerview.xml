@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rl"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/rl_bottom_shopping_cart"
+        android:layout_width="match_parent"
+        android:layout_height="49dp"
+        android:layout_alignParentBottom="true">
+
+        <ImageView
+            android:id="@+id/iv_shopping_cart_img"
+            android:layout_width="25dp"
+            android:layout_height="22dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="17dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_launcher_background" />
+
+        <!--数字角标-->
+        <TextView
+            android:id="@+id/tv_shopping_cart_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/iv_shopping_cart_img"
+            android:layout_alignRight="@+id/iv_shopping_cart_img"
+            android:layout_marginTop="-8dp"
+            android:layout_marginRight="-10dp"
+            android:background="@drawable/shape_shopping_cart_num_bg"
+            android:gravity="center"
+            android:padding="2dp"
+            android:text="0"
+            android:visibility="invisible"
+            android:textColor="#FFFFFF"
+            android:textSize="8dp" />
+
+        <!--价格-->
+        <TextView
+            android:id="@+id/tv_shopping_cart_money"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="14dp"
+            android:layout_toRightOf="@+id/iv_shopping_cart_img"
+            android:text="¥0.00"
+            android:textColor="#FB243E"
+            android:visibility="invisible"
+            android:textSize="19dp" />
+        <!--描述-->
+        <TextView
+            android:id="@+id/tv_shopping_cart_msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_shopping_cart_money"
+            android:layout_marginLeft="14dp"
+            android:layout_toRightOf="@+id/iv_shopping_cart_img"
+            android:text="共3项服务"
+            android:textColor="#333333"
+            android:visibility="invisible"
+            android:textSize="12dp" />
+
+        <!--支付按钮-->
+        <Button
+            android:id="@+id/btn_shopping_cart_pay"
+            android:layout_width="77dp"
+            android:layout_height="34dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/shape_btn_shopping_cart_bg"
+            android:text="去支付"
+            android:textColor="#FFFFFF"
+            android:textSize="13dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#F7F7F7" />
+    </RelativeLayout>
+
+    <!--底部购物车弹窗-->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/rl_bottom_shopping_cart" />
+
+</RelativeLayout>
