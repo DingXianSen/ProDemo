@@ -17,6 +17,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
 }
 
 dependencies {
@@ -29,4 +33,18 @@ dependencies {
     implementation project(path: ':keyboard')
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation project(path: ':stickyheaders')
+    implementation project(path: ':poplibrary')
+
+    //解决Android3.0以后不能butterknife问题
+    implementation 'com.jakewharton:butterknife:10.2.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.1'
+    // androidx不支持support和androidx共存所以使用 替换 implementation 'com.android.support:design:28.0.0'
+    implementation 'com.google.android.material:material:1.0.0'
+    //分包
+    implementation 'com.android.support:multidex:1.0.0'
+
+
+    implementation 'org.greenrobot:eventbus:3.2.0'
+    //FastJson json解析
+    implementation 'com.alibaba:fastjson:1.2.71'
 }

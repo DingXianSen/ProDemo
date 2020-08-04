@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.huidaxuan.ic2cloud.prodemo.grouplist.GroupListActivity;
+import com.huidaxuan.ic2cloud.prodemo.grouplist.ServiceListActivity;
 import com.parkingwang.keyboard.OnInputChangedListener;
 import com.parkingwang.keyboard.PopupKeyboard;
 import com.parkingwang.keyboard.view.InputView;
@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         btn_group_recycler.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, GroupListActivity.class));
+                startActivity(new Intent(MainActivity.this, ServiceListActivity.class));
             }
         });
     }

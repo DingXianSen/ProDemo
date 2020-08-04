@@ -1,17 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/rl"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#FFFFFF"
+    android:layout_height="320dp"
+    android:background="@color/color_ffffff"
     android:orientation="vertical">
+    <!--品牌库筛选下拉，双列表-->
+    <ListView
+        android:id="@+id/lv_pop_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/rl_bottom_shopping_cart"
+        android:divider="@null"
+        android:overScrollMode="never"
+        android:scrollbars="none" />
 
     <RelativeLayout
         android:id="@+id/rl_bottom_shopping_cart"
         android:layout_width="match_parent"
         android:layout_height="49dp"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/iv_shopping_cart_img"
@@ -35,9 +43,9 @@
             android:gravity="center"
             android:padding="2dp"
             android:text="0"
-            android:visibility="invisible"
             android:textColor="#FFFFFF"
-            android:textSize="8dp" />
+            android:textSize="8dp"
+            android:visibility="invisible" />
 
         <!--价格-->
         <TextView
@@ -48,8 +56,8 @@
             android:layout_toRightOf="@+id/iv_shopping_cart_img"
             android:text="¥0.00"
             android:textColor="#FB243E"
-            android:visibility="invisible"
-            android:textSize="19dp" />
+            android:textSize="19dp"
+            android:visibility="invisible" />
         <!--描述-->
         <TextView
             android:id="@+id/tv_shopping_cart_msg"
@@ -60,8 +68,8 @@
             android:layout_toRightOf="@+id/iv_shopping_cart_img"
             android:text="共3项服务"
             android:textColor="#333333"
-            android:visibility="invisible"
-            android:textSize="12dp" />
+            android:textSize="12dp"
+            android:visibility="invisible" />
 
         <!--支付按钮-->
         <Button
@@ -72,7 +80,7 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="15dp"
             android:background="@drawable/shape_btn_shopping_cart_bg"
-            android:text="下单"
+            android:text="去支付"
             android:textColor="#FFFFFF"
             android:textSize="13dp" />
 
@@ -81,12 +89,4 @@
             android:layout_height="1dp"
             android:background="#F7F7F7" />
     </RelativeLayout>
-
-    <!--底部购物车弹窗-->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/rl_bottom_shopping_cart" />
-
-</RelativeLayout>
+</LinearLayout>

@@ -3,4 +3,29 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+
+        <!--程序内使用自定义设置-->
+        <color name="color_ffffff">#FFFFFF</color>
+        <!--透明色-->
+        <color name="color_00000000">#00000000</color>
+        <color name="color_333333">#333333</color>
+        <color name="color_666666">#666666</color>
+        <color name="color_e8e8e8">#E8E8E8</color>
+        <color name="color_fb243d">#FB243D</color>
+        <color name="color_999999">#999999</color>
+        <color name="color_f7f7f7">#F7F7F7</color>
+        <color name="color_f94b15">#F94B15</color>
+        <color name="color_f1f1f1">#F1F1F1</color>
+        <color name="color_fb233d">#FB233D</color>
+        <color name="color_b5b5b5">#B5B5B5</color>
+        <color name="color_f7f8fa">#F7F8FA</color>
+        <color name="color_fa233d">#FA233D</color>
+        <color name="color_fc4d62">#FC4D62</color>
+        <color name="color_09bb07">#09BB07</color>
+        <color name="color_5c19f3">#5C19F3</color>
+        <color name="color_1222f9">#1222F9</color>
+        <color name="color_fa24fb">#7A24FB</color>
+        <color name="color_ccccc">#cccccc</color>
+        <color name="color_bbbbbb">#BBBBBB</color>
+
 </resources>

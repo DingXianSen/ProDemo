@@ -1,2 +1,2 @@
-include ':app', ':keyboard', ':stickyheaders'
+include ':app', ':keyboard', ':stickyheaders', ':poplibrary'
 rootProject.name='ProDemo'
