@@ -1,2 +1,2 @@
-include ':app', ':keyboard', ':stickyheaders', ':poplibrary'
+include ':app', ':keyboard', ':stickyheaders', ':poplibrary', ':picture_library', ':ucrop', ':autosize'
 rootProject.name='ProDemo'

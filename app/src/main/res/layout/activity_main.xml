@@ -34,6 +34,12 @@
         android:id="@+id/btn_group_recycler"
         android:layout_marginTop="50dp"
         android:text="分组列表" />
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:id="@+id/btn_picture_selector"
+        android:layout_marginTop="20dp"
+        android:text="图片选择" />
 
 
 </LinearLayout>

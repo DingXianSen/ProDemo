@@ -30,21 +30,28 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
-    implementation project(path: ':keyboard')
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
-    implementation project(path: ':stickyheaders')
-    implementation project(path: ':poplibrary')
-
     //解决Android3.0以后不能butterknife问题
     implementation 'com.jakewharton:butterknife:10.2.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.1'
     // androidx不支持support和androidx共存所以使用 替换 implementation 'com.android.support:design:28.0.0'
     implementation 'com.google.android.material:material:1.0.0'
+    //图片加载
+    implementation "com.github.bumptech.glide:glide:4.11.0"
     //分包
     implementation 'com.android.support:multidex:1.0.0'
-
-
+    //eventbus
     implementation 'org.greenrobot:eventbus:3.2.0'
     //FastJson json解析
     implementation 'com.alibaba:fastjson:1.2.71'
+    //图片选择
+    implementation project(path: ':picture_library')
+    implementation project(path: ':ucrop')
+    //车牌键盘
+    implementation project(path: ':keyboard')
+    //分组列表头部悬浮
+    implementation project(path: ':stickyheaders')
+    //弹窗
+    implementation project(path: ':poplibrary')
+    implementation project(path: ':autosize')
 }

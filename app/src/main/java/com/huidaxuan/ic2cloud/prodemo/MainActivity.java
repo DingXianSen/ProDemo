@@ -2,12 +2,17 @@ package com.huidaxuan.ic2cloud.prodemo;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
 import com.huidaxuan.ic2cloud.prodemo.grouplist.ServiceListActivity;
+import com.huidaxuan.ic2cloud.prodemo.pictureselector.PictureSelectorTestActivity;
+import com.huidaxuan.ic2cloud.prodemo.util.PermissionsUtils;
+import com.huidaxuan.ic2cloud.prodemo.util.ToastUtil;
+import com.luck.picture.lib.PictureSelectorActivity;
 import com.parkingwang.keyboard.OnInputChangedListener;
 import com.parkingwang.keyboard.PopupKeyboard;
 import com.parkingwang.keyboard.view.InputView;
@@ -16,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
     InputView ipv_activity_service_registration_car_num;
     private PopupKeyboard mPopupKeyboard;
     private Button btn_group_recycler;
+    private Button btn_picture_selector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,9 +29,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ipv_activity_service_registration_car_num = findViewById(R.id.ipv_activity_service_registration_car_num);
         btn_group_recycler = findViewById(R.id.btn_group_recycler);
+        btn_picture_selector = findViewById(R.id.btn_picture_selector);
 
         initListener();
     }
+
 
     private void initListener() {
         // 创建弹出键盘
@@ -67,10 +75,12 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        btn_group_recycler.setOnClickListener(new View.OnClickListener() {
+        btn_group_recycler.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, ServiceListActivity.class)));
+
+        btn_picture_selector.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, ServiceListActivity.class));
+                startActivity(new Intent(MainActivity.this, PictureSelectorTestActivity.class));
             }
         });
     }
