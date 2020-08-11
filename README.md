@@ -1,3 +1,6 @@
 车牌输入键盘，键盘显示隐藏监听
-功能展示 show-->文件.gif
-![image](https://gitee.com/dingxiansen/Vehicle-keyboard-android/blob/master/show/show.gif "在这里输入图片标题")![输入图片说明](https://images.gitee.com/uploads/images/2020/0729/111118_8e098a69_1183776.gif "文件.gif")
+车牌Activity   MainActivity ，效果图如下
+![车牌效果](https://images.gitee.com/uploads/images/2020/0729/111118_8e098a69_1183776.gif "文件.gif")
+
+购物车Activity  ServiceListActivity，效果图如下
+![购物车效果](https://images.gitee.com/uploads/images/2020/0804/180052_f51f7058_1183776.gif "文件 (1).gif")
