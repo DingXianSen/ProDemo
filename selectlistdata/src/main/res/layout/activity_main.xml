@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_popup"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_ffffff"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <Button
+        android:id="@+id/btn_date_1"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="获取今天往后一周的日期（几月几号）" />
+
+    <Button
+        android:id="@+id/btn_date_2"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="获取今天往后一周的集合" />
+
+    <Button
+        android:id="@+id/btn_date_3"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="获取今天之后指定时间内的日期及星期几" />
+
+
+    <!--日历区域-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:orientation="horizontal">
+        <!--横向列表展示-->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rcv_home_top_there"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_weight="1" />
+
+        <RelativeLayout
+            android:id="@+id/rl_calendar_sel"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_centerInParent="true"
+                android:src="@mipmap/ic_launcher" />
+
+        </RelativeLayout>
+    </LinearLayout>
+    <!--工位区域-->
+    <com.huidaxuan.ic2cloud.selectlistdata.diy.popupwindow.gridview.MyGridView
+        android:id="@+id/mgv_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:numColumns="4"
+        android:verticalSpacing="12dp" />
+
+</LinearLayout>

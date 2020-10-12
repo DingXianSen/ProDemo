@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_date_all"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp">
+    <!--日历选择单项UI布局-->
+    <TextView
+        android:id="@+id/tv_item_date_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="09.27"
+        android:textColor="#999999"
+        android:textSize="9dp" />
+
+    <TextView
+        android:id="@+id/tv_item_date_week"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/shape_date_week_bg_sel"
+        android:gravity="center"
+        android:text="今"
+        android:textColor="#ffffff"
+        android:textSize="13dp" />
+
+</LinearLayout>

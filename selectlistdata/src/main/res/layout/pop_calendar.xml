@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/shape_pop_calendar_bg"
+    android:orientation="vertical">
+
+    <!--取消，确定-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:paddingTop="5dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="5dp">
+
+        <TextView
+            android:id="@+id/tv_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:padding="10dp"
+            android:text="取消"
+            android:textColor="@color/color_333333"
+            android:textSize="14dp" />
+
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="选择日期"
+            android:textColor="@color/color_333333"
+            android:textSize="15dp" />
+
+
+        <TextView
+            android:id="@+id/tv_select"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:padding="10dp"
+            android:text="确定"
+            android:textColor="@color/colorPrimary"
+            android:textSize="14dp"
+            android:visibility="invisible" />
+
+    </RelativeLayout>
+
+    <!--星期-->
+    <com.sunyuan.calendarlibrary.MonthLableView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FAFAFA"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        app:cl_lableArr="@array/month_view_lable_arr"
+        app:cl_lableTextColor="#333333"
+        app:cl_lableTextSize="13sp"
+        app:cl_lableWeekendTextColor="#FF6E00" />
+    <!--日历-->
+    <com.sunyuan.calendarlibrary.CalendarView
+        android:id="@+id/calendar_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        app:cl_bottomTextSize="10sp"
+        app:cl_disTextColor="#BBBBBB"
+        app:cl_firstSelectDayText="预约"
+        app:cl_firstTopMargin="8dp"
+        app:cl_rowHeight="62dp"
+        app:cl_sameTextColor="#333333"
+        app:cl_secondTopMargin="4dp"
+        app:cl_selectBgDrawable="@drawable/drawable_calendar_select_bg"
+        app:cl_selectTextColor="#FFFFFF"
+        app:cl_textColor="#333333"
+        app:cl_textSize="16sp"
+        app:cl_textStyle="bold"
+        app:cl_thirdTopMargin="4dp"
+        app:cl_topTextColor="#333333"
+        app:cl_topTextSize="10sp"
+        app:cl_weekendTextColor="#333333" />
+</LinearLayout>
