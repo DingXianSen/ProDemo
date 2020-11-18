@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_app_title_all"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/color_ffffff"
+    android:orientation="vertical">
+    <!--App标题，组成部分，顶部占位，状态栏自动适配高度，返回键，标题文字，右侧图标-->
+
+    <!--占位栏区域-->
+    <include layout="@layout/include_status_bar_height_dynamic" />
+    <!--其他整体-->
+    <RelativeLayout
+        android:id="@+id/rl_title_all"
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:background="@color/color_00000000"
+        android:gravity="center_vertical">
+        <!--返回区域-->
+        <RelativeLayout
+            android:id="@+id/rl_app_title_return"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:paddingLeft="14dp"
+            android:paddingRight="20dp">
+
+            <ImageView
+                android:id="@+id/iv_app_title_left_return"
+                android:layout_width="9dp"
+                android:layout_height="15dp"
+                android:src="@mipmap/iv_app_return" />
+        </RelativeLayout>
+
+        <!--右侧公共区域-->
+        <RelativeLayout
+            android:id="@+id/rl_app_title_right"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:gravity="center"
+            android:paddingLeft="14dp"
+            android:paddingRight="20dp"
+            android:visibility="invisible">
+
+            <ImageView
+                android:id="@+id/iv_app_title_right"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:src="@mipmap/iv_app_return" />
+        </RelativeLayout>
+        <!--标题文字区域-->
+        <TextView
+            android:id="@+id/tv_app_title_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@+id/rl_app_title_right"
+            android:layout_toRightOf="@+id/rl_app_title_return"
+            android:gravity="center"
+            android:text="标题"
+            android:textColor="@color/color_333333"
+            android:textSize="15dp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+</LinearLayout>

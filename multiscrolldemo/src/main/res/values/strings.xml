@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">MultiScrollDemo</string>
+    <string name="more_loading">更多加载中...</string>
+    <string name="no_more">没有更多了</string>
+</resources>

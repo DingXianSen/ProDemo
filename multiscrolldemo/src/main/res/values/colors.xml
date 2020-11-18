@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+
+
+    <!--程序内使用自定义设置-->
+    <color name="color_ffffff">#FFFFFF</color>
+    <!--透明色-->
+    <color name="color_00000000">#00000000</color>
+    <color name="color_333333">#333333</color>
+    <color name="color_666666">#666666</color>
+    <color name="color_e8e8e8">#E8E8E8</color>
+    <color name="color_fb243d">#FB243D</color>
+    <color name="color_999999">#999999</color>
+    <color name="color_f7f7f7">#F7F7F7</color>
+    <color name="color_f94b15">#F94B15</color>
+    <color name="color_f1f1f1">#F1F1F1</color>
+    <color name="color_fb233d">#FB233D</color>
+    <color name="color_b5b5b5">#B5B5B5</color>
+    <color name="color_f7f8fa">#F7F8FA</color>
+    <color name="color_fa233d">#FA233D</color>
+    <color name="color_fc4d62">#FC4D62</color>
+    <color name="color_09bb07">#09BB07</color>
+    <color name="color_5c19f3">#5C19F3</color>
+    <color name="color_1222f9">#1222F9</color>
+    <color name="color_fa24fb">#7A24FB</color>
+    <color name="color_ccccc">#cccccc</color>
+    <color name="color_bbbbbb">#BBBBBB</color>
+
+
+    <color name="app_color_grey">#393a3e</color>
+    <color name="app_color_black">#000000</color>
+    <color name="app_color_f6">#f6f6f6</color>
+    <color name="app_color_fa">#fafafa</color>
+    <color name="app_color_divider">#B6B6B6</color>
+    <color name="app_color_c51">#f94c51</color>
+    <color name="app_color_green">#43c117</color>
+    <color name="app_color_53575e">#53575e</color>
+    <color name="app_color_transparent">#00000000</color>
+    <color name="app_color_white">#FFFFFF</color>
+    <color name="app_color_white_transparent">#E0DBDBDB</color>
+    <color name="app_color_blue">#7D7DFF</color>
+    <color name="app_color_9b">#9b9b9b</color>
+    <color name="app_color_e0ff6100">#E0FF6100</color>
+    <color name="app_color_red">#FF0000</color>
+    <color name="themeGray">#DEDEDE</color>
+    <!--basic color-->
+    <color name="mainBlack">#242828</color>
+    <color name="mainBlack5B">#5b5b5b</color>
+    <color name="mainRed">#ff3955</color>
+    <color name="mainBlue">#4277fb</color>
+    <color name="mainWhite">#ffffff</color>
+    <color name="mainGrayF8">#f8f8f8</color>
+    <color name="mainGrayF0">#f0f0f0</color>
+    <color name="mainGrayC6">#c6c6c6</color>
+    <color name="mainGray88">#888888</color>
+
+    <!--font color-->
+    <color name="fontGray88">#888888</color>
+    <color name="fontGrayC6">#c6c6c6</color>
+    <color name="fontBlack">#242828</color>
+    <color name="fontRed">#ff3955</color>
+
+
+    <!---->
+    <color name="colorRed">#ff0112</color>
+    <color name="colorGray">#a4a2a2</color>
+    <color name="colorGreen">#05f449</color>
+    <color name="colorWhite">#ffffff</color>
+    <color name="colorBlack">#000000</color>
+</resources>

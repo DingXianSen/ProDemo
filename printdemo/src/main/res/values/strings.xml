@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">PrintDemo</string>
+
+    <string name="none_ble_device">找不到设备</string>
+</resources>

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="蓝牙打印机测试Demo" />
+
+    <TextView
+        android:id="@+id/tv_print_device"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="选择打印的设备：" />
+
+    <TextView
+        android:id="@+id/tv_print_device_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="连接状态：" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="50dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_select_blue_tooth_print"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:text="选择打印设备" />
+
+        <Button
+            android:id="@+id/btn_select_blue_tooth_close"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:text="断开连接" />
+    </LinearLayout>
+
+
+    <EditText
+        android:id="@+id/et_print_text"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="20dp"
+        android:hint="请输入要打印的文字" />
+
+    <Button
+        android:id="@+id/btn_print_text"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="打印普通文字" />
+
+    <Button
+        android:id="@+id/btn_print_bitmap_local"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="20dp"
+        android:text="打印系统内置图" />
+
+    <Button
+        android:id="@+id/btn_print_bitmap_net"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="20dp"
+        android:text="打印网络图片" />
+
+
+    <Button
+        android:id="@+id/btn_print_bitmap_sample"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="20dp"
+        android:text="打印格式文本" />
+
+    <EditText
+        android:id="@+id/et_print_net_ip"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="20dp"
+        android:hint="请输入打印机IP" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_print_net_ip_client"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:text="连接" />
+
+        <Button
+            android:id="@+id/btn_print_net_ip_close"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:text="断开" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_print_net_ip"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="20dp"
+        android:text="使用网络打印机打印" />
+
+
+    <Button
+        android:text="New网络打印机"
+        android:id="@+id/btn_print_net"
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:id="@+id/btn_picture_photo"
+        android:layout_marginTop="20dp"
+        android:text="截屏测试" />
+</LinearLayout>

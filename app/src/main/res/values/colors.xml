@@ -3,8 +3,8 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
-
     <!--程序内使用自定义设置-->
+
     <color name="color_ffffff">#FFFFFF</color>
     <!--透明色-->
     <color name="color_00000000">#00000000</color>

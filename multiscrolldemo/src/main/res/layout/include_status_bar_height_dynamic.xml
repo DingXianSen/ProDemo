@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:id="@+id/ll_include_status_bar_height_dynamic"
+    android:layout_height="wrap_content">
+    <!--状态栏动态填充高度，只在会影响的时候才需要，
+    比如标题栏的时候，计算高度填充防止标题栏被刘海屏幕遮挡-->
+    <View
+        android:id="@+id/v_include_status_bar_height_dynamic"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@color/color_00000000" />
+</LinearLayout>

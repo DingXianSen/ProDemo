@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/twenty">
+
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="40分钟前"
+        android:textColor="@color/mainGrayC6"
+        android:textSize="@dimen/font_14"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/tv_do_what"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/six"
+        android:text="发布文章"
+        android:textColor="@color/mainBlack"
+        android:textSize="@dimen/font_14"
+        app:layout_constraintStart_toEndOf="@id/tv_time"
+        tools:ignore="MissingConstraints" />
+</androidx.constraintlayout.widget.ConstraintLayout>
