@@ -9,6 +9,7 @@ import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.huidaxuan.ic2cloud.meituanshoppingcart.MainActivity;
 import com.huidaxuan.ic2cloud.meituanshoppingcart.base.BaseApplication;
 
 
