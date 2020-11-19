@@ -7,3 +7,5 @@
 
 日历效果Calendarlibrary Selectlistdata 效果图如下
 ![日历效果](https://images.gitee.com/uploads/images/2020/1012/143102_caec1142_1183776.gif "riligif.gif")
+
+新增美团购物车效果MeiTuan，购物车高度自适应，当占到当前屏幕70%则不在继续升高，左右两个列表交互，详情见meituanshoppingcart项目下gif展示
