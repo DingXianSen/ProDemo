@@ -1,9 +1,5 @@
 package com.huidaxuan.ic2cloud.meituanshoppingcart;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.graphics.Path;
@@ -11,31 +7,39 @@ import android.graphics.PathMeasure;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.alibaba.fastjson.JSON;
 import com.huidaxuan.ic2cloud.meituanshoppingcart.adapter.LeftProductTypeAdapter;
 import com.huidaxuan.ic2cloud.meituanshoppingcart.adapter.RightProductAdapter;
 import com.huidaxuan.ic2cloud.meituanshoppingcart.base.BaseActivity;
+import com.huidaxuan.ic2cloud.meituanshoppingcart.enitty.EventBusShoppingEntity;
 import com.huidaxuan.ic2cloud.meituanshoppingcart.enitty.ProductListEntity;
-import com.huidaxuan.ic2cloud.meituanshoppingcart.headerManager.RecyclerViewLayoutManager;
+import com.huidaxuan.ic2cloud.meituanshoppingcart.enitty.ShopCart;
+import com.huidaxuan.ic2cloud.meituanshoppingcart.imp.ShopCartImp;
+import com.huidaxuan.ic2cloud.meituanshoppingcart.pop.CustomPartShadowPopupView;
 import com.huidaxuan.ic2cloud.meituanshoppingcart.util.ToastUtil;
+import com.huidaxuan.ic2cloud.meituanshoppingcart.util.Tool;
+import com.lxj.xpopup.XPopup;
 
-import org.zakariya.stickyheaders.StickyHeaderLayoutManager;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 
-import static androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_DRAGGING;
-
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements LeftProductTypeAdapter.onItemSelectedListener, ShopCartImp, View.OnClickListener {
     @BindView(R.id.left_menu)//左侧列表
             RecyclerView leftMenu;
     @BindView(R.id.right_menu)//右侧列表
@@ -52,9 +56,6 @@ public class MainActivity extends BaseActivity {
     ProductListEntity headMenu;
 
     private boolean leftClickType = false;//左侧菜单点击引发的右侧联动
-    private boolean rightScroll = true;//右侧滑动了标示
-    //存储的key的方式，parentId-childId
-    private Map<String, ProductListEntity.ProductEntity> stringchildBeanMap = new HashMap<>();
 
     @BindView(R.id.rl)//动画效果二级列表 父容器
             RelativeLayout rl;
@@ -67,9 +68,15 @@ public class MainActivity extends BaseActivity {
     private float[] mCurrentPosition = new float[2];
     @BindView(R.id.tv_shopping_cart_count)
     TextView tv_shopping_cart_count;
+
     //购物车无数据时要隐藏处理
     @BindView(R.id.tv_shopping_cart_money)
     TextView tv_shopping_cart_money;
+    ShopCart shopCart;
+    @BindView(R.id.btn_shopping_cart_pay)
+    Button btn_shopping_cart_pay;
+    @BindView(R.id.rl_bottom_shopping_cart)
+    RelativeLayout rl_bottom_shopping_cart;
 
     @Override
     protected int getLayout() {
@@ -78,7 +85,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void initEvent() {
-
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -88,47 +95,86 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void initListener() {
+        btn_shopping_cart_pay.setOnClickListener(this);
+        rl_bottom_shopping_cart.setOnClickListener(this);
         leftMenu.setLayoutManager(new LinearLayoutManager(this));
         rightMenu.setLayoutManager(new LinearLayoutManager(this));
-        headerLayout.setVisibility(View.GONE);
+        headerLayout.setVisibility(View.VISIBLE);
 
-        StickyHeaderLayoutManager stickyHeaderLayoutManager = new StickyHeaderLayoutManager();
-//        RecyclerViewLayoutManager stickyHeaderLayoutManager = new RecyclerViewLayoutManager();
-//        LinearLayoutManager stickyHeaderLayoutManager = new LinearLayoutManager(MainActivity.this);
-        rightMenu.setLayoutManager(stickyHeaderLayoutManager);
+//        StickyHeaderLayoutManager stickyHeaderLayoutManager = new StickyHeaderLayoutManager();
+//        rightMenu.setLayoutManager(stickyHeaderLayoutManager);
         //右侧列表监听
         rightMenu.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                //手指按下的时候为true
-                if (newState == SCROLL_STATE_DRAGGING) {
-                    rightScroll = true;
-                    leftClickType = false;
-                }
             }
 
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                //右侧滑动，根据下标选中左侧对应的数据
+                if (recyclerView.canScrollVertically(1) == false) {//无法下滑
+                    showHeadView();
+                    return;
+                }
+
                 View underView = null;
                 if (dy > 0) {
                     underView = rightMenu.findChildViewUnder(headerLayout.getX(), headerLayout.getMeasuredHeight() + 1);
                 } else {
                     underView = rightMenu.findChildViewUnder(headerLayout.getX(), 0);
                 }
+
                 if (underView != null && underView.getContentDescription() != null) {
-                    //如果滑动了，但是左侧没点击，不触发
-                    if (!leftClickType && rightScroll) {
-                        int position = Integer.parseInt(underView.getContentDescription().toString());
-                        leftAdapter.setSelectedNum(position);
-                        if (leftClickType) leftClickType = false;
+                    int position = Integer.parseInt(underView.getContentDescription().toString());
+                    ProductListEntity menu = rightAdapter.getMenuOfMenuByPosition(position);
+
+                    if (leftClickType || !menu.getTypeName().equals(headMenu.getTypeName())) {
+                        if (dy > 0 && headerLayout.getTranslationY() <= 1 && headerLayout.getTranslationY() >= -1 * headerLayout.getMeasuredHeight() * 4 / 5 && !leftClickType) {// underView.getTop()>9
+                            int dealtY = underView.getTop() - headerLayout.getMeasuredHeight();
+                            headerLayout.setTranslationY(dealtY);
+//                            Log.e(TAG, "onScrolled: "+headerLayout.getTranslationY()+"   "+headerLayout.getBottom()+"  -  "+headerLayout.getMeasuredHeight() );
+                        } else if (dy < 0 && headerLayout.getTranslationY() <= 0 && !leftClickType) {
+                            headerView.setText(menu.getTypeName());
+                            int dealtY = underView.getBottom() - headerLayout.getMeasuredHeight();
+                            headerLayout.setTranslationY(dealtY);
+                        } else {
+                            headerLayout.setTranslationY(0);
+                            headMenu = menu;
+                            headerView.setText(headMenu.getTypeName());
+                            for (int i = 0; i < productListEntities.size(); i++) {
+                                if (productListEntities.get(i) == headMenu) {
+                                    leftAdapter.setSelectedNum(i);
+                                    break;
+                                }
+                            }
+                            if (leftClickType) leftClickType = false;
+                        }
                     }
                 }
 
             }
         });
+    }
+
+    /**
+     * 显示标题
+     */
+    private void showHeadView() {
+        headerLayout.setTranslationY(0);
+        View underView = rightMenu.findChildViewUnder(headerLayout.getX(), 0);
+        if (underView != null && underView.getContentDescription() != null) {
+            int position = Integer.parseInt(underView.getContentDescription().toString());
+            ProductListEntity entity = rightAdapter.getMenuOfMenuByPosition(position + 1);
+            headMenu = entity;
+            headerView.setText(headMenu.getTypeName());
+            for (int i = 0; i < productListEntities.size(); i++) {
+                if (productListEntities.get(i) == headMenu) {
+                    leftAdapter.setSelectedNum(i);
+                    break;
+                }
+            }
+        }
     }
 
     /**
@@ -146,242 +192,122 @@ public class MainActivity extends BaseActivity {
      */
     private void initListData() {
         productListEntities = new ArrayList<>();
+        shopCart = new ShopCart();
 
         List<ProductListEntity.ProductEntity> productEntities1 = new ArrayList<>();
-        productEntities1.add(new ProductListEntity.ProductEntity("", "新上市猕猴桃1-1", "34", 10.0, 0, "1"));
-        productEntities1.add(new ProductListEntity.ProductEntity("", "新上市猕猴桃2-1", "34", 20.0, 0, "2"));
-        productEntities1.add(new ProductListEntity.ProductEntity("", "新上市猕猴桃3-1", "34", 30.0, 0, "3"));
-        productEntities1.add(new ProductListEntity.ProductEntity("", "新上市猕猴桃4-1", "34", 40.0, 0, "4"));
-        productEntities1.add(new ProductListEntity.ProductEntity("", "新上市猕猴桃5-1", "34", 50.0, 0, "5"));
-        productEntities1.add(new ProductListEntity.ProductEntity("", "新上市猕猴桃6-1", "34", 50.0, 0, "6"));
-        productEntities1.add(new ProductListEntity.ProductEntity("", "新上市猕猴桃7-1", "34", 50.0, 0, "7"));
+        productEntities1.add(new ProductListEntity.ProductEntity("img地址", "新上市猕猴桃1-1", "34", 10.0, 0, "1", "1"));
+        productEntities1.add(new ProductListEntity.ProductEntity("img地址", "新上市猕猴桃2-1", "34", 20.0, 0, "2", "1"));
+        productEntities1.add(new ProductListEntity.ProductEntity("img地址", "新上市猕猴桃3-1", "34", 30.0, 0, "3", "1"));
+        productEntities1.add(new ProductListEntity.ProductEntity("img地址", "新上市猕猴桃4-1", "34", 40.0, 0, "4", "1"));
+        productEntities1.add(new ProductListEntity.ProductEntity("img地址", "新上市猕猴桃5-1", "34", 50.0, 0, "5", "1"));
+        productEntities1.add(new ProductListEntity.ProductEntity("img地址", "新上市猕猴桃6-1", "34", 50.0, 0, "6", "1"));
+        productEntities1.add(new ProductListEntity.ProductEntity("img地址", "新上市猕猴桃7-1", "34", 50.0, 0, "7", "1"));
 
         List<ProductListEntity.ProductEntity> productEntities2 = new ArrayList<>();
-        productEntities2.add(new ProductListEntity.ProductEntity("", "新上市猕猴桃1-2", "34", 10.0, 0, "6"));
-        productEntities2.add(new ProductListEntity.ProductEntity("", "新上市猕猴桃2-2", "34", 20.0, 0, "7"));
-        productEntities2.add(new ProductListEntity.ProductEntity("", "新上市猕猴桃3-2", "34", 30.0, 0, "8"));
-        productEntities2.add(new ProductListEntity.ProductEntity("", "新上市猕猴桃4-2", "34", 40.0, 0, "9"));
-        productEntities2.add(new ProductListEntity.ProductEntity("", "新上市猕猴桃5-2", "34", 50.0, 0, "10"));
+        productEntities2.add(new ProductListEntity.ProductEntity("img地址", "新上市猕猴桃1-2", "34", 10.0, 0, "6", "2"));
+        productEntities2.add(new ProductListEntity.ProductEntity("img地址", "新上市猕猴桃2-2", "34", 20.0, 0, "7", "2"));
+        productEntities2.add(new ProductListEntity.ProductEntity("img地址", "新上市猕猴桃3-2", "34", 30.0, 0, "8", "2"));
+        productEntities2.add(new ProductListEntity.ProductEntity("img地址", "新上市猕猴桃4-2", "34", 40.0, 0, "9", "2"));
+        productEntities2.add(new ProductListEntity.ProductEntity("img地址", "新上市猕猴桃5-2", "34", 50.0, 0, "10", "2"));
 
         List<ProductListEntity.ProductEntity> productEntities3 = new ArrayList<>();
-        productEntities3.add(new ProductListEntity.ProductEntity("", "新上市猕猴桃1-3", "34", 10.0, 0, "6"));
-        productEntities3.add(new ProductListEntity.ProductEntity("", "新上市猕猴桃2-3", "34", 20.0, 0, "7"));
-        productEntities3.add(new ProductListEntity.ProductEntity("", "新上市猕猴桃3-3", "34", 30.0, 0, "8"));
-        productEntities3.add(new ProductListEntity.ProductEntity("", "新上市猕猴桃4-3", "34", 40.0, 0, "9"));
-        productEntities3.add(new ProductListEntity.ProductEntity("", "新上市猕猴桃5-3", "34", 50.0, 0, "10"));
+        productEntities3.add(new ProductListEntity.ProductEntity("img地址", "新上市猕猴桃1-3", "34", 10.0, 0, "6", "3"));
+        productEntities3.add(new ProductListEntity.ProductEntity("img地址", "新上市猕猴桃2-3", "34", 20.0, 0, "7", "3"));
+        productEntities3.add(new ProductListEntity.ProductEntity("img地址", "新上市猕猴桃3-3", "34", 30.0, 0, "8", "3"));
+        productEntities3.add(new ProductListEntity.ProductEntity("img地址", "新上市猕猴桃4-3", "34", 40.0, 0, "9", "3"));
+        productEntities3.add(new ProductListEntity.ProductEntity("img地址", "新上市猕猴桃5-3", "34", 50.0, 0, "10", "3"));
 
         List<ProductListEntity.ProductEntity> productEntities4 = new ArrayList<>();
-        productEntities4.add(new ProductListEntity.ProductEntity("", "新上市猕猴桃1-4", "34", 10.0, 0, "6"));
-        productEntities4.add(new ProductListEntity.ProductEntity("", "新上市猕猴桃2-4", "34", 20.0, 0, "7"));
-        productEntities4.add(new ProductListEntity.ProductEntity("", "新上市猕猴桃3-4", "34", 30.0, 0, "8"));
-        productEntities4.add(new ProductListEntity.ProductEntity("", "新上市猕猴桃4-4", "34", 40.0, 0, "9"));
-        productEntities4.add(new ProductListEntity.ProductEntity("", "新上市猕猴桃5-4", "34", 50.0, 0, "10"));
+        productEntities4.add(new ProductListEntity.ProductEntity("img地址", "新上市猕猴桃1-4", "34", 10.0, 0, "6", "4"));
+        productEntities4.add(new ProductListEntity.ProductEntity("img地址", "新上市猕猴桃2-4", "34", 20.0, 0, "7", "4"));
+        productEntities4.add(new ProductListEntity.ProductEntity("img地址", "新上市猕猴桃3-4", "34", 30.0, 0, "8", "4"));
+        productEntities4.add(new ProductListEntity.ProductEntity("img地址", "新上市猕猴桃4-4", "34", 40.0, 0, "9", "4"));
+        productEntities4.add(new ProductListEntity.ProductEntity("img地址", "新上市猕猴桃5-4", "34", 50.0, 0, "10", "4"));
 
         List<ProductListEntity.ProductEntity> productEntities5 = new ArrayList<>();
-        productEntities5.add(new ProductListEntity.ProductEntity("", "新上市猕猴桃1-5", "34", 10.0, 0, "1"));
-        productEntities5.add(new ProductListEntity.ProductEntity("", "新上市猕猴桃2-5", "34", 20.0, 0, "2"));
-        productEntities5.add(new ProductListEntity.ProductEntity("", "新上市猕猴桃3-5", "34", 30.0, 0, "3"));
-        productEntities5.add(new ProductListEntity.ProductEntity("", "新上市猕猴桃4-5", "34", 40.0, 0, "4"));
-        productEntities5.add(new ProductListEntity.ProductEntity("", "新上市猕猴桃5-5", "34", 50.0, 0, "5"));
-        productEntities5.add(new ProductListEntity.ProductEntity("", "新上市猕猴桃6-5", "34", 50.0, 0, "6"));
-        productEntities5.add(new ProductListEntity.ProductEntity("", "新上市猕猴桃7-5", "34", 50.0, 0, "7"));
+        productEntities5.add(new ProductListEntity.ProductEntity("img地址", "新上市猕猴桃1-5", "34", 10.0, 0, "1", "5"));
+        productEntities5.add(new ProductListEntity.ProductEntity("img地址", "新上市猕猴桃2-5", "34", 20.0, 0, "2", "5"));
+        productEntities5.add(new ProductListEntity.ProductEntity("img地址", "新上市猕猴桃3-5", "34", 30.0, 0, "3", "5"));
+        productEntities5.add(new ProductListEntity.ProductEntity("img地址", "新上市猕猴桃4-5", "34", 40.0, 0, "4", "5"));
+        productEntities5.add(new ProductListEntity.ProductEntity("img地址", "新上市猕猴桃5-5", "34", 50.0, 0, "5", "5"));
+        productEntities5.add(new ProductListEntity.ProductEntity("img地址", "新上市猕猴桃6-5", "34", 50.0, 0, "6", "5"));
+        productEntities5.add(new ProductListEntity.ProductEntity("img地址", "新上市猕猴桃7-5", "34", 50.0, 0, "7", "5"));
 
         productListEntities.add(new ProductListEntity("1", "热销水果", productEntities1));
         productListEntities.add(new ProductListEntity("2", "鲜果制作", productEntities2));
         productListEntities.add(new ProductListEntity("3", "特色零食", productEntities3));
         productListEntities.add(new ProductListEntity("4", "水果盒子", productEntities4));
         productListEntities.add(new ProductListEntity("5", "新榨果汁", productEntities5));
+        Log.e("jsonjson", "--------json:" + JSON.toJSONString(productListEntities));
 
 
         //设置数据源，数据绑定展示
         leftAdapter = new LeftProductTypeAdapter(MainActivity.this, productListEntities);
-        rightAdapter = new RightProductAdapter(MainActivity.this, productListEntities);
-
-
-        /**
-         * 加减之后购物车数据展示及存储传输给后台的数据集合
-         */
-        rightAdapter.setOnItemChrldListner(new RightProductAdapter.OnItemChrldListner() {
-            @Override
-            public void onCall(View view, int sectionIndex, int itemIndex, String type, ProductListEntity.ProductEntity entity) {
-                String mapKey = sectionIndex + "-" + itemIndex;
-                //根据type来区分是加还是减操作
-                if (type.equals("add")) {
-                    //加操作,因为加 购物车的动画效果只有在列表添加，所以把方法抽取出来
-                    shoppingCartCountAdd(mapKey, entity);
-                    addCart(view);
-                } else if (type.equals("reduce")) {
-                    //减操作
-//                    updateShoppingCartCountMap(mapKey, "reduce");
-                } else if (type.equals("zero")) {
-                    //归零操作
-//                    updateShoppingCartCountMap(mapKey, "zero");
-                }
-            }
-        });
-
-        //左侧列表点击，刷新右侧列表数据
-        leftAdapter.setOnItemChrldListner(new LeftProductTypeAdapter.OnItemChrldListner() {
-            @Override
-            public void onCall(View view, int sectionIndex) {
-                leftClickType = true;
-//                leftAdapter.setSelectedNum(sectionIndex);
-                //当前的父级下标，对应这右侧的父级下标，这里不应该是滑动过去，应该是点击左侧直接定位过去
-                rightAdapter.setSelectedNum(sectionIndex);
-                //知道是哪一项，是否可以根据列表的条目判断，当前下标之前的数据对应的position就是要滑动过去的区域
-
-//                ToastUtil.showShort(MainActivity.this, "置顶第:" + getPositionByLeftClick(sectionIndex) + "个，内容为：" + productListEntities.get(getPositionByLeftClick(sectionIndex)) + "--》的数据");
-                ToastUtil.showShort(MainActivity.this, "置顶第:" + getPositionByLeftClick(sectionIndex) + "个");
-//                rightMenu.scrollToPosition(getPositionByLeftClick(sectionIndex));
-//                rightMenu.smoothScrollToPosition(getPositionByLeftClick(sectionIndex));
-
-//                ((StickyHeaderLayoutManager) rightMenu.getLayoutManager()).scrollToPositionWithOffset(0, 0);
-
-
-//                if (getPositionByLeftClick(sectionIndex) != -1) {
-//                    smoothMoveToPosition(rightMenu,getPositionByLeftClick(sectionIndex));
-//                }else {
-//                    smoothMoveToPosition(rightMenu,getPositionByLeftClick(sectionIndex)+1);
-//                }
-            }
-        });
+        rightAdapter = new RightProductAdapter(MainActivity.this, productListEntities, shopCart);
 
 
         rightMenu.setAdapter(rightAdapter);
         leftMenu.setAdapter(leftAdapter);
         //左侧列表单项选择
-//        leftAdapter.addItemSelectedListener(this);
-
+        leftAdapter.addItemSelectedListener(this);
+        rightAdapter.setShopCartImp(this);
         //设置初始头部
-//        initHeadView();
+        initHeadView();
     }
 
 
     /**
-     * 当前选中之前有多少子项，这样就可以得到要滑动多少下标
+     * 初始头部
+     */
+    private void initHeadView() {
+        headMenu = rightAdapter.getMenuOfMenuByPosition(0);
+        headerLayout.setContentDescription("0");
+        headerView.setText(headMenu.getTypeName());
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);//eventbus解绑
+        leftAdapter.removeItemSelectedListener(this);
+    }
+
+    /**
+     * 左侧列表单项选中
      *
      * @param position
-     * @return
+     * @param menu
      */
-    private int getPositionByLeftClick(int position) {
-        int jumpPosition = 0;
-        int saveI = 0;
+    @Override
+    public void onLeftItemSelected(int position, ProductListEntity menu) {
+        int sum = 0;
         for (int i = 0; i < position; i++) {
-            jumpPosition += productListEntities.get(i).getProductEntities().size() + 1;
-            saveI = i;
+            sum += productListEntities.get(i).getProductEntities().size() + 1;
         }
-//        if (jumpPosition != 0) {
-//            jumpPosition = jumpPosition - saveI;
-//        }
-
-        Log.e("sectionIndexs", "jumpPosition------>" + jumpPosition);
-        return jumpPosition;
+//        StickyHeaderLayoutManager layoutManager = (StickyHeaderLayoutManager) rightMenu.getLayoutManager();
+        LinearLayoutManager layoutManager = (LinearLayoutManager) rightMenu.getLayoutManager();
+        rightMenu.scrollToPosition(position);
+        layoutManager.scrollToPositionWithOffset(sum, 0);
+        leftClickType = true;
     }
 
     /**
-     * 抽取增加操作，
-     *
-     * @param mapKey
-     * @param flag
-     */
-    private void updateShoppingCartCountMap(String mapKey, String flag) {
-        if (stringchildBeanMap.containsKey(mapKey)) {
-            //存在
-            ProductListEntity.ProductEntity childBean = stringchildBeanMap.get(mapKey);
-            int count = 0;
-            if (flag.equals("add")) {
-                childBean.setProductCount(childBean.getProductCount() + 1);
-                stringchildBeanMap.put(mapKey, childBean);
-                //列表刷新
-//                refreshDataSource(mapKey, childBean.getProductCount());
-            } else if (flag.equals("reduce")) {
-
-            } else if (flag.equals("zero")) {
-
-            }
-        }
-    }
-
-    /**
-     * 列表UI刷新，为什么抽取出来，当直接点击列表的时候可以通过适配器刷新，但是还有底部弹窗可以操作数量，所以要抽取
-     *
-     * @param mapKey       父下标，就是真是数据的真是下标，直接刷
-     * @param productCount
-     */
-    private void refreshDataSource(String mapKey, int productCount) {
-        String sectionIndex = mapKey.substring(0, mapKey.indexOf("-"));
-        String itemIndex = mapKey.substring(mapKey.indexOf("-") + 1, mapKey.indexOf("-") + 2);
-        //因为mapKey存储到是组Index-子项Index 所以可以通过拆分得到这两个下标进行刷新
-//        productListEntities.get().setCount(count);
-//        adapter.notifyDataSetChanged();
-
-        //首先得知道是那一组数据，然后再在组里找是那一条数据，然后替换count进行刷新
-        ProductListEntity listEntity = getMenuByPosition(Integer.parseInt(sectionIndex));
-
-
-        ProductListEntity.ProductEntity entity = getDishByPosition(Integer.parseInt(sectionIndex));
-    }
-
-    List<ProductListEntity.ProductEntity> allList = new ArrayList<>();
-
-
-    /**
-     * 借助adapter中的方法来知道刷新那个数据，获取分类对象
-     *
-     * @param position
-     * @return
-     */
-    public ProductListEntity getMenuByPosition(int position) {
-        int sum = 0;
-        for (ProductListEntity menu : productListEntities) {
-            if (position == sum) {
-                return menu;
-            }
-            sum += menu.getProductEntities().size() + 1;
-        }
-        return null;
-    }
-
-    public int getMenuPositionByPosition(int position) {
-        int sum = 0;
-        for (ProductListEntity menu : productListEntities) {
-            if (position == sum) {
-                return sum;
-            }
-            sum += menu.getProductEntities().size() + 1;
-        }
-        return sum;
-    }
-
-
-    /**
-     * 借助adapter中的方法来知道刷新那个数据，获取对象
-     *
-     * @param position
-     * @return
-     */
-    public ProductListEntity.ProductEntity getDishByPosition(int position) {
-        for (ProductListEntity menu : productListEntities) {
-            if (position > 0 && position <= menu.getProductEntities().size()) {
-                return menu.getProductEntities().get(position - 1);
-            } else {
-                position -= menu.getProductEntities().size() + 1;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * 添加购物车动画
+     * 购物车+
      *
      * @param view
+     * @param position
      */
-    private void addCart(View view) {
+    @Override
+    public void add(View view, int position, ProductListEntity.ProductEntity entity) {
+        addCart(view, entity);
+    }
+
+    //加入购物车曲线动画
+    private void addCart(View view, ProductListEntity.ProductEntity entity) {
 //   一、创造出执行动画的主题---imageview
         //代码new一个imageview，图片资源是上面的imageview的图片
         // (这个图片就是执行动画的图片，从开始位置出发，经过一个抛物线（贝塞尔曲线），移动到购物车里)
         final ImageView goods = new ImageView(MainActivity.this);
-//        goods.setImageDrawable(iv.getDrawable());
         goods.setImageDrawable(getResources().getDrawable(R.drawable.shape_shopping_cart_num_bg, null));
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(50, 50);
         rl.addView(goods, params);
@@ -455,7 +381,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onAnimationEnd(Animator animation) {
                 //更新底部数据
-                getMapCountAndMoney(stringchildBeanMap);
+                showTotalPrice(entity);
                 // 把移动的图片imageview从父布局里移除
                 rl.removeView(goods);
             }
@@ -473,77 +399,113 @@ public class MainActivity extends BaseActivity {
     }
 
     /**
-     * 更新购物车底部的数据
-     *
-     * @param stringchildBeanMap
+     * 底部价格和数量显示
      */
-    private void getMapCountAndMoney(Map<String, ProductListEntity.ProductEntity> stringchildBeanMap) {
-        int textCount = 0;
-        double allMoney = 0.00;
-        //遍历Map,然后得到count
-        for (ProductListEntity.ProductEntity m : stringchildBeanMap.values()) {
-            Log.e("btn_shopping_cart_pay", "map集合中存储的数据---->" + m.getProductName() + "--->X" + m.getProductCount());
-            textCount += m.getProductCount();
-            allMoney += (m.getProductCount() * m.getProductCount());
-        }
-        tv_shopping_cart_count.setText("" + textCount);
-        tv_shopping_cart_money.setText("¥" + allMoney);
-        if (textCount > 0) {//显示
-            tv_shopping_cart_count.setVisibility(View.VISIBLE);
+    private void showTotalPrice(ProductListEntity.ProductEntity entity) {
+        if (shopCart != null && shopCart.getShoppingTotalPrice() > 0) {
             tv_shopping_cart_money.setVisibility(View.VISIBLE);
-        } else {//隐藏处理
-            tv_shopping_cart_count.setVisibility(View.INVISIBLE);
-            tv_shopping_cart_money.setVisibility(View.INVISIBLE);
-        }
-    }
-
-    /**
-     * 购物车+效果和数据操作
-     *
-     * @param mapKey
-     * @param entity
-     */
-    private void shoppingCartCountAdd(String mapKey, ProductListEntity.ProductEntity entity) {
-        //如果集合中存在则增加数量，否则add一条数据之后在进行数量改变
-        if (stringchildBeanMap.containsKey(mapKey)) {//存在，因为eventbus还需要公用方法，所以不能直接替换对象
-            //改变数量，根据key获取对象，然后set更改
-            updateShoppingCartCountMap(mapKey, "add");
-        } else {//不存在，添加一条数据
-            stringchildBeanMap.put(mapKey, entity);
-            getMapCountAndMoney(stringchildBeanMap);
-        }
-    }
-
-
-
-
-    //目标项是否在最后一个可见项之后
-    private boolean mShouldScroll;
-    //记录目标项位置
-    private int mToPosition;
-    /**
-     * 滑动到指定位置
-     */
-    private void smoothMoveToPosition(RecyclerView mRecyclerView, final int position) {
-        // 第一个可见位置
-        int firstItem = mRecyclerView.getChildLayoutPosition(mRecyclerView.getChildAt(0));
-        // 最后一个可见位置
-        int lastItem = mRecyclerView.getChildLayoutPosition(mRecyclerView.getChildAt(mRecyclerView.getChildCount() - 1));
-        if (position < firstItem) {
-            // 第一种可能:跳转位置在第一个可见位置之前
-            mRecyclerView.smoothScrollToPosition(position);
-        } else if (position <= lastItem) {
-            // 第二种可能:跳转位置在第一个可见位置之后
-            int movePosition = position - firstItem;
-            if (movePosition >= 0 && movePosition < mRecyclerView.getChildCount()) {
-                int top = mRecyclerView.getChildAt(movePosition).getTop();
-                mRecyclerView.smoothScrollBy(0, top);
+            tv_shopping_cart_money.setText("￥ " + shopCart.getShoppingTotalPrice());
+            tv_shopping_cart_count.setVisibility(View.VISIBLE);
+            //得到总的数量
+            int textCount = 0;
+            for (ProductListEntity.ProductEntity m : shopCart.getShoppingSingle().keySet()) {
+                Log.e("btn_shopping_cart_pay", "map集合中存储的数据---->" + m.getProductCount());
+                textCount += m.getProductCount();
             }
+            tv_shopping_cart_count.setText("" + textCount);
         } else {
-            // 第三种可能:跳转位置在最后可见项之后
-            mRecyclerView.smoothScrollToPosition(position);
-            mToPosition = position;
-            mShouldScroll = true;
+            tv_shopping_cart_money.setVisibility(View.INVISIBLE);
+            tv_shopping_cart_count.setVisibility(View.GONE);
+        }
+        updateLeftCount(entity);
+    }
+
+    /**
+     * 更新左侧数字角标(暂时不包含清空)，触发更新肯定是在加或者减的时候触发,根据子项中的父ID和左侧ID比对，
+     */
+    private void updateLeftCount(ProductListEntity.ProductEntity entity) {
+        if (shopCart != null) {
+            //加和减的时候要知道是那个左侧下边的,知道下标获取父id,然后从map中取count
+            if (entity != null) {
+                Log.e("updateLeftCount", "-------parentId:" + entity.getParentId() + "---------count:" + shopCart.getParentCountMap().get(entity.getParentId()));
+                leftAdapter.setUpdateMenuCount(entity.getParentId(), shopCart.getParentCountMap().get(entity.getParentId()));
+            }
+            if (rightAdapter != null) rightAdapter.notifyDataSetChanged();//跟新列表
         }
     }
+
+    /**
+     * 购物车减
+     *
+     * @param view
+     * @param position
+     */
+    @Override
+    public void remove(View view, int position, ProductListEntity.ProductEntity en) {
+        showTotalPrice(en);
+    }
+
+    XPopup popup;
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.btn_shopping_cart_pay:
+                //结算的商品列表
+                ToastUtil.showShort(MainActivity.this, "dianjile");
+                if (shopCart.getShoppingSingle().size() > 0) {
+                    List<ProductListEntity.ProductEntity> commitListData = new ArrayList<>();
+                    for (ProductListEntity.ProductEntity m : shopCart.getShoppingSingle().keySet()) {
+                        Log.e("btn_cart_pay", "map集合中存储的数据---->" + m.getProductCount());
+                        commitListData.add(m);
+                    }
+                    for (int i = 0; i < commitListData.size(); i++) {
+                        Log.e("btn_cart_pay_list", "commitList---->" + commitListData.get(i));
+                    }
+                    Log.e("btn_cart_pay_list_JSON", "commitList---->" + JSON.toJSONString(commitListData));
+                }
+
+                break;
+            case R.id.rl_bottom_shopping_cart://打开购物车
+                Log.e("getWindowHeight", "---------height:" + Tool.getWindowHeight(MainActivity.this));
+                //获取屏幕的高度，然后拿到百分之70
+                int popHeight = (int) (Tool.getWindowHeight(MainActivity.this) * 0.7);
+                if (shopCart != null && shopCart.getShoppingAccount() > 0) {
+                    new XPopup.Builder(MainActivity.this)
+                            .atView(view)
+                            .maxHeight(popHeight)
+                            .isRequestFocus(false)
+                            .asCustom(new CustomPartShadowPopupView(MainActivity.this, shopCart))
+                            .show();
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+
+    /**
+     * 清空购物车及左侧列表都角标和商品列表
+     */
+    private void clearCartDataAndListData() {
+        shopCart.clear();
+        shopCart.getParentCountMap().clear();
+        showTotalPrice(null);
+        //左侧清空
+        leftAdapter.setClearCount();
+    }
+
+    //定义处理接收的方法
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(EventBusShoppingEntity entity) {
+        if (entity.getKey().equals("add")) {
+            showTotalPrice(entity.getEntity());
+        } else if (entity.getKey().equals("reduce")) {
+            showTotalPrice(entity.getEntity());
+        } else if (entity.getKey().equals("clearAll")) {//清空全部
+            clearCartDataAndListData();
+        }
+    }
+
 }

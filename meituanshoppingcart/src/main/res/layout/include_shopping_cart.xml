@@ -14,7 +14,7 @@
             android:id="@+id/left_menu"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.3"
+            android:layout_weight="0.2"
             android:background="@color/color_f3f3f3" />
         <!--右侧区域-->
         <RelativeLayout
@@ -44,7 +44,7 @@
             android:id="@+id/iv_shopping_cart_img"
             android:layout_width="17dp"
             android:layout_height="16dp"
-            android:layout_marginLeft="41dp"
+            android:layout_marginLeft="61dp"
             android:layout_marginTop="10dp"
             android:scaleType="fitXY"
             android:src="@mipmap/iv_shopping_cart" />
@@ -53,7 +53,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/iv_shopping_cart_img"
-            android:layout_marginLeft="37dp"
+            android:layout_marginLeft="57dp"
             android:text="购物车"
             android:textColor="@color/color_999999"
             android:textSize="10dp" />

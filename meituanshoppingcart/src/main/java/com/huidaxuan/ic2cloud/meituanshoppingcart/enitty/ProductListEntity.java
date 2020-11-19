@@ -13,11 +13,21 @@ public class ProductListEntity {
     private String typeId;
     private String typeName;
     private List<ProductEntity> productEntities;
+    private int typeCount;
 
     public ProductListEntity(String typeId, String typeName, List<ProductEntity> productEntities) {
         this.typeId = typeId;
         this.typeName = typeName;
         this.productEntities = productEntities;
+        this.typeCount = 0;
+    }
+
+    public int getTypeCount() {
+        return typeCount;
+    }
+
+    public void setTypeCount(int typeCount) {
+        this.typeCount = typeCount;
     }
 
     public String getTypeId() {
@@ -52,15 +62,37 @@ public class ProductListEntity {
         private Double productMoney;
         private int productCount;
 
-        public ProductEntity(String productImg, String productName, String productMonth, Double productMoney, int productCount,String productId) {
+        private Double productCartMoney;//方便购物车计算的价格
+        private String parentId;//父ID，用来更新左侧列表使用
+
+
+        public ProductEntity(String productImg, String productName, String productMonth, Double productMoney, int productCount, String productId, String parentId) {
             this.productImg = productImg;
             this.productName = productName;
             this.productMonth = productMonth;
             this.productMoney = productMoney;
             this.productCount = productCount;
             this.productId = productId;
+            this.productCartMoney = Double.valueOf(productCount);
+            this.parentId = parentId;
         }
 
+
+        public String getParentId() {
+            return parentId;
+        }
+
+        public void setParentId(String parentId) {
+            this.parentId = parentId;
+        }
+
+        public Double getProductCartMoney() {
+            return productCartMoney;
+        }
+
+        public void setProductCartMoney(Double productCartMoney) {
+            this.productCartMoney = productCartMoney;
+        }
 
         public String getProductId() {
             return productId;

@@ -52,4 +52,5 @@ dependencies {
     implementation 'com.alibaba:fastjson:1.2.71'
     implementation project(path: ':autosize')
     implementation project(path: ':stickyheaders')
+    implementation project(path: ':poplibrary')
 }

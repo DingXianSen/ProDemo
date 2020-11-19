@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <!--品牌库筛选下拉，双列表-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="43dp"
+        android:background="@drawable/shape_pop_shopping_cart_top_bg">
+
+        <TextView
+            android:id="@+id/tv_shopping_cart_top_key"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="13dp"
+            android:text="购物车"
+            android:textColor="@color/color_222222"
+            android:textSize="13dp" />
+
+        <TextView
+            android:id="@+id/tv_shopping_cart_top_key_v"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="13dp"
+            android:layout_toRightOf="@+id/tv_shopping_cart_top_key"
+            android:text="(共2件商品)"
+            android:textColor="@color/color_999999"
+            android:textSize="11dp" />
+
+        <TextView
+            android:id="@+id/tv_shopping_cart_clear_all"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:gravity="center_vertical"
+            android:paddingLeft="8dp"
+            android:paddingRight="14dp"
+            android:text="清空"
+            android:textColor="@color/color_999999"
+            android:textSize="12dp" />
+
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/tv_shopping_cart_clear_all"
+            android:src="@mipmap/iv_shopping_cart_del" />
+
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/color_f3f3f3" />
+
+    <ListView
+        android:id="@+id/lv_pop_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/rl_bottom_shopping_cart"
+        android:background="@color/color_ffffff"
+        android:divider="@null"
+        android:overScrollMode="never"
+        android:scrollbars="none" />
+</LinearLayout>
