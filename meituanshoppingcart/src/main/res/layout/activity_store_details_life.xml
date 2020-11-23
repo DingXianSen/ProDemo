@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_ffffff"
+    android:orientation="vertical">
+    <!--车主门店详情-->
+    <!--顶部背景图-->
+    <ImageView
+        android:id="@+id/iv_header"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="-50dp"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/app_name"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_launcher_background"
+        app:layout_collapseMode="parallax" />
+
+
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/refreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="41dp"
+        app:srlEnablePreviewInEditMode="false">
+
+        <!--下拉的头部-->
+        <com.scwang.smartrefresh.layout.header.ClassicsHeader
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:srlAccentColor="@android:color/white" />
+
+        <com.huidaxuan.ic2cloud.meituanshoppingcart.scrollall.wiget.scrollview.JudgeNestedScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.appbar.CollapsingToolbarLayout
+                        android:id="@+id/collapse"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:contentScrim="?attr/colorPrimary"
+                        app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+                        app:titleEnabled="false">
+                        <!--滑动吸顶隐藏区域-->
+                        <include layout="@layout/include_store_details_top" />
+                    </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+                </LinearLayout>
+
+                <!--动态添加展示区域-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <!--本地生活也就是水果商品门店不用动态添加tab-->
+                    <TextView
+                        android:id="@+id/tv_store_details_life_shopping_cart_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="41dp"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="18dp"
+                        android:text="全部商品"
+                        android:textColor="@color/color_333333"
+                        android:textSize="14dp" />
+
+                    <include layout="@layout/include_product_shopping_cart" />
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+        </com.huidaxuan.ic2cloud.meituanshoppingcart.scrollall.wiget.scrollview.JudgeNestedScrollView>
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_bottom_shopping_cart_activity"
+        android:layout_width="match_parent"
+        android:layout_height="47dp"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
+        android:background="@color/color_ffffff">
+
+        <ImageView
+            android:id="@+id/iv_shopping_cart_img_1"
+            android:layout_width="17dp"
+            android:layout_height="16dp"
+            android:layout_marginLeft="61dp"
+            android:layout_marginTop="10dp"
+            android:scaleType="fitXY"
+            android:src="@mipmap/iv_shopping_cart" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/iv_shopping_cart_img_1"
+            android:layout_marginLeft="57dp"
+            android:text="购物车"
+            android:textColor="@color/color_999999"
+            android:textSize="10dp" />
+
+        <!--数字角标-->
+        <TextView
+            android:id="@+id/tv_shopping_cart_count_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/iv_shopping_cart_img_1"
+            android:layout_alignRight="@+id/iv_shopping_cart_img_1"
+            android:layout_marginTop="-5dp"
+            android:layout_marginRight="-5dp"
+            android:background="@drawable/shape_shopping_cart_num_bg"
+            android:gravity="center"
+            android:padding="2dp"
+            android:text="0"
+            android:textColor="#FFFFFF"
+            android:textSize="8dp"
+            android:visibility="invisible" />
+
+        <!--价格-->
+        <TextView
+            android:id="@+id/tv_shopping_cart_money_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:layout_marginRight="14dp"
+            android:layout_toLeftOf="@+id/btn_shopping_cart_pay_1"
+            android:text="¥0.00"
+            android:textColor="@color/color_ff0c0c"
+            android:textSize="15dp"
+            android:visibility="visible" />
+        <!--描述-->
+        <TextView
+            android:id="@+id/tv_shopping_cart_msg_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_shopping_cart_money_1"
+            android:layout_marginRight="14dp"
+            android:layout_toLeftOf="@+id/btn_shopping_cart_pay_1"
+            android:text="免配送费"
+            android:textColor="@color/color_bbbbbb"
+            android:textSize="10dp"
+            android:visibility="visible" />
+
+        <!--支付按钮-->
+        <Button
+            android:id="@+id/btn_shopping_cart_pay_1"
+            android:layout_width="77dp"
+            android:layout_height="29dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/shape_btn_shopping_cart_bg"
+            android:text="去结算"
+            android:textColor="#FFFFFF"
+            android:textSize="13dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#F7F7F7" />
+    </RelativeLayout>
+
+    <!--吸顶区域-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <!--吸顶操作区android:background="@android:color/transparent"-->
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            style="@style/AppTheme.Toolbar"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="0dp"
+            android:background="@android:color/transparent"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            app:layout_collapseMode="pin">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <include layout="@layout/include_status_bar_height_dynamic" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="38dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <!--返回区域-->
+                    <RelativeLayout
+                        android:id="@+id/rl_app_title_return"
+                        android:layout_width="33dp"
+                        android:layout_height="match_parent"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:id="@+id/iv_app_title_left"
+                            android:layout_width="15dp"
+                            android:layout_height="20dp"
+                            android:layout_centerInParent="true"
+                            android:src="@mipmap/back_white" />
+                    </RelativeLayout>
+                    <!--标题文字区域-->
+                    <TextView
+                        android:id="@+id/tv_app_title_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_toLeftOf="@+id/rl_app_title_right"
+                        android:layout_toRightOf="@+id/rl_app_title_return"
+                        android:gravity="center"
+                        android:text="标题"
+                        android:textColor="@color/color_333333"
+                        android:textSize="15dp"
+                        android:textStyle="bold" />
+                    <!--右侧公共区域-->
+                    <RelativeLayout
+                        android:id="@+id/rl_app_title_right"
+                        android:layout_width="33dp"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:gravity="center"
+                        android:visibility="visible">
+
+                        <ImageView
+                            android:id="@+id/iv_app_title_right"
+                            android:layout_width="15dp"
+                            android:layout_height="20dp"
+                            android:layout_centerInParent="true"
+                            android:scaleType="fitXY"
+                            android:src="@mipmap/sc_white" />
+                    </RelativeLayout>
+                </RelativeLayout>
+            </LinearLayout>
+        </androidx.appcompat.widget.Toolbar>
+
+        <TextView
+            android:id="@+id/tv_store_details_life_shopping_cart_title2"
+            android:layout_width="match_parent"
+            android:layout_height="41dp"
+            android:layout_below="@+id/toolbar"
+            android:gravity="center_vertical"
+            android:paddingLeft="18dp"
+            android:text="全部商品"
+            android:textColor="@color/color_333333"
+            android:textSize="14dp"
+            android:visibility="gone"
+            app:layout_collapseMode="pin" />
+
+    </RelativeLayout>
+
+</FrameLayout>

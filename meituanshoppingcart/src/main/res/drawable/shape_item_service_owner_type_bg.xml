@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--车主服务-类型背景-->
+    <size
+        android:width="33dp"
+        android:height="19dp" />
+    <corners
+        android:bottomRightRadius="8dp"
+        android:topLeftRadius="8dp" />
+    <solid android:color="@color/color_feeaea" />
+</shape>

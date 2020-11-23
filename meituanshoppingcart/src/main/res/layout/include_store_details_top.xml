@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rl_store_details_top_all"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/color_ffffff"
+    android:paddingBottom="10dp"
+    android:orientation="vertical">
+    <!--门店顶部抽取，底部背景所以使用RelativeLayout-->
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="174dp"
+        android:scaleType="fitXY"
+        android:src="@mipmap/ic_launcher" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_store_details_top_info_all"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="14dp"
+        android:layout_marginTop="81dp"
+        android:layout_marginRight="14dp"
+        android:layout_marginBottom="5dp"
+        app:cardElevation="10dp">
+        <!--内容区域-->
+        <!--android:background="@drawable/shape_btn_drop_down_more_ff_bg"-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_btn_drop_down_more_ff_bg"
+            android:paddingLeft="14dp"
+            android:paddingBottom="9dp">
+            <!--图片区域-->
+            <ImageView
+                android:id="@+id/criv_store_details_top_img"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="14dp"
+                android:layout_marginRight="10dp"
+                android:scaleType="fitXY"
+                android:src="@mipmap/ic_launcher" />
+            <!--类型-名称->区域-->
+            <LinearLayout
+                android:id="@+id/ll_store_details_name_all"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="20dp"
+                android:layout_toLeftOf="@+id/criv_store_details_top_img"
+                android:gravity="center_vertical">
+                <!--门店类型-->
+                <TextView
+                    android:id="@+id/tv_item_service_owner_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/shape_item_service_owner_type_bg"
+                    android:gravity="center"
+                    android:text="4S店"
+                    android:textColor="@color/color_fe3939"
+                    android:textSize="9dp" />
+
+                <!--标题-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="6dp"
+                    android:text="保定高碑店长安4S店"
+                    android:textColor="@color/color_222222"
+                    android:textSize="15dp" />
+                <!--右侧箭头-->
+                <ImageView
+                    android:layout_width="5dp"
+                    android:layout_height="9dp"
+                    android:layout_marginLeft="6dp"
+                    android:src="@mipmap/iv_app_go" />
+            </LinearLayout>
+
+            <!--标签区域-->
+<!--            <com.huidaxuan.ic2cloud.app2c.view.widget.hlv.HorizontalListView-->
+<!--                android:id="@+id/hlv_store_details_label"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="15dp"-->
+<!--                android:layout_below="@+id/ll_store_details_name_all"-->
+<!--                android:layout_marginTop="10dp"-->
+<!--                android:layout_toLeftOf="@+id/criv_store_details_top_img" />-->
+
+            <!--已服务888单-->
+            <LinearLayout
+                android:id="@+id/ll_store_details_yfw_all"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="已服务"
+                    android:textColor="@color/color_999999"
+                    android:textSize="12dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="3dp"
+                    android:text="888单"
+                    android:textColor="@color/color_ff6666"
+                    android:textSize="12dp" />
+            </LinearLayout>
+
+            <!--分割线-->
+            <View
+                android:id="@+id/v_store_details_line1"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/ll_store_details_yfw_all"
+                android:layout_marginTop="9dp"
+                android:layout_marginRight="14dp"
+                android:background="@color/color_ececec" />
+
+            <!--电话区域-->
+            <RelativeLayout
+                android:id="@+id/rl_store_details_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/v_store_details_line1"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:padding="15dp">
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:src="@mipmap/iv_store_details_phone" />
+            </RelativeLayout>
+
+            <!--营业时间区域-->
+            <LinearLayout
+                android:id="@+id/ll_store_details_time_all"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/v_store_details_line1"
+                android:layout_marginTop="10dp"
+                android:layout_toLeftOf="@+id/rl_store_details_phone"
+                android:gravity="center_vertical">
+                <!--图片-->
+                <ImageView
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:src="@mipmap/iv_store_details_time" />
+                <!--营业时间-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="7dp"
+                    android:text="营业时间：8：00-24：00"
+                    android:textColor="@color/color_999999"
+                    android:textSize="12dp" />
+            </LinearLayout>
+
+            <!--营业时间区域-->
+            <LinearLayout
+                android:id="@+id/ll_store_details_address_all"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ll_store_details_time_all"
+                android:layout_marginTop="7dp"
+                android:layout_toLeftOf="@+id/rl_store_details_phone"
+                android:gravity="center_vertical">
+                <!--图片-->
+                <ImageView
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:src="@mipmap/iv_store_details_address" />
+                <!--营业时间-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="7dp"
+                    android:text="地址：高碑店市及西路路西路口3434号"
+                    android:textColor="@color/color_999999"
+                    android:textSize="12dp" />
+            </LinearLayout>
+            <!--距离-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ll_store_details_address_all"
+                android:layout_marginLeft="52dp"
+                android:layout_marginTop="7dp"
+                android:text="距离您3.3km"
+                android:textColor="@color/color_999999"
+                android:textSize="12dp" />
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!--休息中及添加爱车区域-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cv_store_details_top_info_all"
+        android:orientation="vertical">
+        <!--休息中-->
+        <TextView
+            android:id="@+id/tv_include_store_details_top_xxz"
+            android:layout_width="match_parent"
+            android:layout_height="43dp"
+            android:layout_marginLeft="14dp"
+            android:layout_marginTop="-4dp"
+            android:layout_marginRight="14dp"
+            android:background="@drawable/shape_tv_store_details_xxz_bg"
+            android:gravity="center"
+            android:text="休息中"
+            android:textColor="@color/color_fe3939"
+            android:textSize="15dp" />
+
+        <!--添加爱车区域-->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_include_store_details_add_car"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="14dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="14dp"
+            android:layout_marginBottom="5dp"
+            app:cardElevation="5dp"
+            android:layout_height="wrap_content">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+
+                android:background="@drawable/shape_btn_drop_down_more_ff_bg"
+                android:paddingLeft="14dp"
+                android:paddingRight="14dp">
+
+                <ImageView
+                    android:id="@+id/iv_store_details_add_car_img"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/iv_store_details_add_car" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="7dp"
+                    android:layout_toRightOf="@+id/iv_store_details_add_car_img"
+                    android:text="添加爱车"
+                    android:textColor="@color/color_222222"
+                    android:textSize="12dp" />
+
+                <Button
+                    android:layout_width="67dp"
+                    android:layout_height="22dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/shape_btn_store_details_fe39_bg"
+                    android:text="去添加"
+                    android:textColor="@color/color_ffffff"
+                    android:textSize="11dp" />
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
+
+
+</RelativeLayout>

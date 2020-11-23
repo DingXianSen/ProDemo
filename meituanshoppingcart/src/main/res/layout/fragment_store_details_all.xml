@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <!--门店详情-全部套餐,无购物车-->
+    <include layout="@layout/include_product_shopping_cart" />
+
+</LinearLayout>

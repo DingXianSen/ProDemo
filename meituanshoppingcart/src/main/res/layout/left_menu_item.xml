@@ -36,6 +36,16 @@
             android:textColor="#FFFFFF"
             android:textSize="8dp"
             android:visibility="invisible" />
+
+        <!--左侧竖线区域,选中展示-->
+        <View
+            android:id="@+id/v_left_menu_item_line"
+            android:layout_width="3dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="12dp"
+            android:background="@color/color_fe3939"
+            android:layout_marginBottom="12dp" />
+
     </RelativeLayout>
 
 

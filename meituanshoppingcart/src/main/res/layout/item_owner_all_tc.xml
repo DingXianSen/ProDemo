@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/right_dish_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <!--车主服务-门店详情-全部套餐-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="15dp">
+        <!--单项图片-->
+        <ImageView
+            android:id="@+id/iv_item_life_product"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginRight="12dp"
+            android:src="@mipmap/ic_launcher_round" />
+
+        <!--名称-->
+        <TextView
+            android:id="@+id/tv_item_life_product_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@+id/iv_item_life_product"
+            android:ellipsize="end"
+            android:maxLength="11"
+            android:singleLine="true"
+            android:text="套餐名称"
+            android:textColor="@color/color_222222"
+            android:textSize="12dp" />
+
+        <!--描述-->
+        <TextView
+            android:id="@+id/tv_item_life_product_msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_item_life_product_name"
+            android:layout_marginTop="7dp"
+            android:layout_marginRight="30dp"
+            android:layout_toLeftOf="@+id/btn_item_life_product_pay"
+            android:layout_toRightOf="@+id/iv_item_life_product"
+            android:ellipsize="end"
+            android:maxLines="3"
+            android:text="这里是套餐的木奥数套餐描述多出来的字儿这里是套餐的木奥数套餐描述多出来的字儿到下一行就行了这里是套餐的木奥数套餐描述多出来的字儿到下一行就行了到下一行就行了"
+            android:textColor="@color/color_999999"
+            android:textSize="10dp" />
+
+        <!--月售-->
+        <TextView
+            android:id="@+id/tv_item_life_product_monty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/btn_item_life_product_pay"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="7dp"
+            android:layout_marginRight="21dp"
+            android:text="月售 34"
+            android:textColor="@color/color_999999"
+            android:textSize="10dp" />
+
+        <Button
+            android:id="@+id/btn_item_life_product_pay"
+            android:layout_width="43dp"
+            android:layout_height="19dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="19dp"
+            android:layout_marginRight="14dp"
+            android:background="@drawable/shape_btn_shopping_cart_bg"
+            android:gravity="center"
+            android:text="购买"
+            android:textColor="@color/color_ffffff"
+            android:textSize="11dp" />
+
+        <View
+            android:id="@+id/v_item_owner_tc_line"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignLeft="@+id/tv_item_life_product_name"
+            android:layout_alignParentBottom="true"
+            android:background="@color/color_ececec" />
+
+        <!--售价-->
+        <TextView
+            android:id="@+id/tv_item_life_product_money_key"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_item_life_product_msg"
+            android:layout_alignParentBottom="true"
+            android:layout_toRightOf="@+id/iv_item_life_product"
+            android:gravity="bottom"
+            android:paddingBottom="14dp"
+            android:text="¥"
+            android:textColor="@color/color_ff0c0c"
+            android:textSize="9dp" />
+        <!--售价-->
+        <TextView
+            android:id="@+id/tv_item_life_product_money"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_item_life_product_msg"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="2dp"
+            android:layout_toRightOf="@+id/tv_item_life_product_money_key"
+            android:gravity="bottom"
+            android:paddingBottom="14dp"
+            android:text="28.8"
+            android:textColor="@color/color_ff0c0c"
+            android:textSize="14dp" />
+    </RelativeLayout>
+
+</LinearLayout>

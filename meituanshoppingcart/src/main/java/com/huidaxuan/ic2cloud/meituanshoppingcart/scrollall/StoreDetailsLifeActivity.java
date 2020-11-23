@@ -1,12 +1,13 @@
-package com.huidaxuan.ic2cloud.meituanshoppingcart;
+package com.huidaxuan.ic2cloud.meituanshoppingcart.scrollall;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
-import android.content.Intent;
 import android.graphics.Path;
 import android.graphics.PathMeasure;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -15,23 +16,32 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
+import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.fastjson.JSON;
+import com.huidaxuan.ic2cloud.meituanshoppingcart.R;
 import com.huidaxuan.ic2cloud.meituanshoppingcart.adapter.LeftProductTypeAdapter;
 import com.huidaxuan.ic2cloud.meituanshoppingcart.adapter.RightProductAdapter;
-import com.huidaxuan.ic2cloud.meituanshoppingcart.base.BaseActivity;
+import com.huidaxuan.ic2cloud.meituanshoppingcart.base.BaseTrDarkActivity;
 import com.huidaxuan.ic2cloud.meituanshoppingcart.enitty.EventBusShoppingEntity;
 import com.huidaxuan.ic2cloud.meituanshoppingcart.enitty.ProductListEntity;
 import com.huidaxuan.ic2cloud.meituanshoppingcart.enitty.ShopCart;
 import com.huidaxuan.ic2cloud.meituanshoppingcart.imp.ShopCartImp;
 import com.huidaxuan.ic2cloud.meituanshoppingcart.pop.CustomPartShadowPopupView;
-import com.huidaxuan.ic2cloud.meituanshoppingcart.scrollall.StoreDetailsLifeActivity;
-import com.huidaxuan.ic2cloud.meituanshoppingcart.scrollall.StoreDetailsOwnerActivity;
-import com.huidaxuan.ic2cloud.meituanshoppingcart.util.ToastUtil;
+import com.huidaxuan.ic2cloud.meituanshoppingcart.scrollall.util.ScreenUtil;
+import com.huidaxuan.ic2cloud.meituanshoppingcart.scrollall.wiget.scrollview.JudgeNestedScrollView;
+import com.huidaxuan.ic2cloud.meituanshoppingcart.util.StatusBarUtil;
 import com.huidaxuan.ic2cloud.meituanshoppingcart.util.Tool;
 import com.lxj.xpopup.XPopup;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshHeader;
+import com.scwang.smartrefresh.layout.listener.SimpleMultiPurposeListener;
+import com.scwang.smartrefresh.layout.util.DensityUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -42,7 +52,52 @@ import java.util.List;
 
 import butterknife.BindView;
 
-public class MainActivity extends BaseActivity implements LeftProductTypeAdapter.onItemSelectedListener, ShopCartImp, View.OnClickListener {
+/**
+ * @packageName:com.huidaxuan.ic2cloud.app2c.view.activity
+ * @className: StoreDetailsQmActivityBf
+ * @description:门店详情-本地生活的详情
+ * @author: dingchao
+ * @time: 2020-11-16 11:13
+ */
+public class StoreDetailsLifeActivity extends BaseTrDarkActivity implements View.OnClickListener, LeftProductTypeAdapter.onItemSelectedListener, ShopCartImp {
+    @BindView(R.id.v_include_status_bar_height_dynamic)
+    View v_include_status_bar_height_dynamic;
+
+    @BindView(R.id.tv_app_title_text)
+    TextView tv_app_title_text;
+    @BindView(R.id.iv_app_title_left)
+    ImageView iv_app_title_left;
+    @BindView(R.id.iv_app_title_right)
+    ImageView iv_app_title_right;
+    @BindView(R.id.rl_app_title_return)
+    RelativeLayout rl_app_title_return;
+
+    @BindView(R.id.iv_header)
+    ImageView ivHeader;
+    @BindView(R.id.refreshLayout)
+    SmartRefreshLayout refreshLayout;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.rl_shopping_cart_all)
+    RelativeLayout rl_shopping_cart_all;
+    @BindView(R.id.scrollView)
+    JudgeNestedScrollView scrollView;
+
+    int toolBarPositionY = 0;
+    private int mOffset = 0;
+    private int mScrollY = 0;
+
+    @BindView(R.id.tv_include_store_details_top_xxz)
+    TextView tv_include_store_details_top_xxz;
+
+    @BindView(R.id.cv_include_store_details_add_car)
+    CardView cv_include_store_details_add_car;
+    @BindView(R.id.tv_store_details_life_shopping_cart_title)
+    TextView tv_store_details_life_shopping_cart_title;
+    @BindView(R.id.tv_store_details_life_shopping_cart_title2)
+    TextView tv_store_details_life_shopping_cart_title2;
+
+    /*购物车区域*/
     @BindView(R.id.left_menu)//左侧列表
             RecyclerView leftMenu;
     @BindView(R.id.right_menu)//右侧列表
@@ -62,37 +117,62 @@ public class MainActivity extends BaseActivity implements LeftProductTypeAdapter
 
     @BindView(R.id.rl)//动画效果二级列表 父容器
             RelativeLayout rl;
-    @BindView(R.id.iv_shopping_cart_img)//动画效果底部购物车图标，最终落入的地方
+    @BindView(R.id.iv_shopping_cart_img_1)//动画效果底部购物车图标，最终落入的地方
             ImageView iv_shopping_cart_img;
     private PathMeasure mPathMeasure;
     /**
      * 贝塞尔曲线中间过程的点的坐标
      */
     private float[] mCurrentPosition = new float[2];
-    @BindView(R.id.tv_shopping_cart_count)
+    @BindView(R.id.tv_shopping_cart_count_1)
     TextView tv_shopping_cart_count;
 
     //购物车无数据时要隐藏处理
-    @BindView(R.id.tv_shopping_cart_money)
+    @BindView(R.id.tv_shopping_cart_money_1)
     TextView tv_shopping_cart_money;
     ShopCart shopCart;
-    @BindView(R.id.btn_shopping_cart_pay)
+    @BindView(R.id.btn_shopping_cart_pay_1)
     Button btn_shopping_cart_pay;
-    @BindView(R.id.rl_bottom_shopping_cart)
+    @BindView(R.id.rl_bottom_shopping_cart_activity)
     RelativeLayout rl_bottom_shopping_cart;
+    /*购物车区域*/
 
-    @BindView(R.id.btn_shopping_cart_1)
-    Button btn_shopping_cart_1;
-    @BindView(R.id.btn_shopping_cart_2)
-    Button btn_shopping_cart_2;
+
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.rl_app_title_return:
+                finish();
+                break;
+            case R.id.btn_shopping_cart_pay_1://去结算
+                break;
+            case R.id.rl_bottom_shopping_cart_activity://打开购物车
+                Log.e("getWindowHeight", "---------height:" + Tool.getWindowHeight(StoreDetailsLifeActivity.this));
+                //获取屏幕的高度，然后拿到百分之70
+                int popHeight = (int) (Tool.getWindowHeight(StoreDetailsLifeActivity.this) * 0.7);
+                if (shopCart != null && shopCart.getShoppingAccount() > 0) {
+                    new XPopup.Builder(StoreDetailsLifeActivity.this)
+                            .atView(v)
+                            .maxHeight(popHeight)
+                            .isRequestFocus(false)
+                            .asCustom(new CustomPartShadowPopupView(StoreDetailsLifeActivity.this, shopCart))
+                            .show();
+                }
+                break;
+
+
+        }
+    }
+
 
     @Override
     protected int getLayout() {
-        return R.layout.activity_main;
+        return R.layout.activity_store_details_life;
     }
 
     @Override
     protected void initEvent() {
+        StatusBarUtil.setStatusBarDarkTheme(StoreDetailsLifeActivity.this, false);//白色
+        Tool.setStatusBarHeight(StoreDetailsLifeActivity.this, v_include_status_bar_height_dynamic);
         EventBus.getDefault().register(this);
     }
 
@@ -103,10 +183,9 @@ public class MainActivity extends BaseActivity implements LeftProductTypeAdapter
 
     @Override
     protected void initListener() {
+        rl_app_title_return.setOnClickListener(this);
         btn_shopping_cart_pay.setOnClickListener(this);
         rl_bottom_shopping_cart.setOnClickListener(this);
-        btn_shopping_cart_1.setOnClickListener(this);
-        btn_shopping_cart_2.setOnClickListener(this);
 
         leftMenu.setLayoutManager(new LinearLayoutManager(this));
         rightMenu.setLayoutManager(new LinearLayoutManager(this));
@@ -165,37 +244,112 @@ public class MainActivity extends BaseActivity implements LeftProductTypeAdapter
 
             }
         });
+        initView();
     }
 
-    /**
-     * 显示标题
-     */
-    private void showHeadView() {
-        headerLayout.setTranslationY(0);
-        View underView = rightMenu.findChildViewUnder(headerLayout.getX(), 0);
-        if (underView != null && underView.getContentDescription() != null) {
-            int position = Integer.parseInt(underView.getContentDescription().toString());
-            ProductListEntity entity = rightAdapter.getMenuOfMenuByPosition(position + 1);
-            headMenu = entity;
-            headerView.setText(headMenu.getTypeName());
-            for (int i = 0; i < productListEntities.size(); i++) {
-                if (productListEntities.get(i) == headMenu) {
-                    leftAdapter.setSelectedNum(i);
-                    break;
-                }
+    private void initView() {
+        //隐藏休息中和添加爱车
+        tv_include_store_details_top_xxz.setVisibility(View.GONE);
+        cv_include_store_details_add_car.setVisibility(View.GONE);
+
+        //下拉监听，禁用
+        refreshLayout.setOnMultiPurposeListener(new SimpleMultiPurposeListener() {
+            @Override
+            public void onHeaderPulling(RefreshHeader header, float percent, int offset, int bottomHeight, int extendHeight) {
+                mOffset = offset / 2;
+                ivHeader.setTranslationY(mOffset - mScrollY);
+                toolbar.setAlpha(1 - Math.min(percent, 1));
             }
-        }
+
+            @Override
+            public void onHeaderReleasing(RefreshHeader header, float percent, int offset, int bottomHeight, int extendHeight) {
+                mOffset = offset / 2;
+                ivHeader.setTranslationY(mOffset - mScrollY);
+                toolbar.setAlpha(1 - Math.min(percent, 1));
+            }
+        });
+        refreshLayout.setEnableRefresh(false);
+
+        toolbar.post(new Runnable() {
+            @Override
+            public void run() {
+                dealWithViewPager();
+            }
+        });
+
+        //scrollView滑动监听
+        scrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            int lastScrollY = 0;
+            int h = DensityUtil.dp2px(211);
+            int color = ContextCompat.getColor(getApplicationContext(), R.color.color_ffffff) & 0x00ffffff;
+
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                int[] location = new int[2];
+                tv_store_details_life_shopping_cart_title.getLocationOnScreen(location);
+                int yPosition = location[1];
+                if (yPosition < toolBarPositionY) {
+                    tv_store_details_life_shopping_cart_title2.setVisibility(View.VISIBLE);
+                    tv_store_details_life_shopping_cart_title2.setBackgroundResource(R.color.color_ffffff);
+                    scrollView.setNeedScroll(false);
+                } else {
+                    tv_store_details_life_shopping_cart_title2.setVisibility(View.GONE);
+                    scrollView.setNeedScroll(true);
+
+                }
+
+                if (lastScrollY < h) {
+                    scrollY = Math.min(h, scrollY);
+                    mScrollY = scrollY > h ? h : scrollY;
+                    tv_app_title_text.setAlpha(1f * mScrollY / h);
+                    toolbar.setBackgroundColor(((255 * mScrollY / h) << 24) | color);
+                    ivHeader.setTranslationY(mOffset - mScrollY);
+                }
+                if (scrollY == 0) {
+                    iv_app_title_left.setImageResource(R.mipmap.back_white);
+                    iv_app_title_right.setImageResource(R.mipmap.sc_white);
+//                    ivMenu.setImageResource(R.drawable.icon_menu_white);
+                } else {
+                    iv_app_title_left.setImageResource(R.mipmap.iv_app_return);
+                    iv_app_title_right.setImageResource(R.mipmap.sc_black);
+//                    ivMenu.setImageResource(R.drawable.icon_menu_black);
+                }
+
+                lastScrollY = scrollY;
+            }
+        });
+        tv_app_title_text.setAlpha(0);
+        toolbar.setBackgroundColor(0);
+
+
     }
 
     /**
-     * 数据初始化
+     * 高度设定
      */
+    private void dealWithViewPager() {
+        toolBarPositionY = toolbar.getHeight();
+        ViewGroup.LayoutParams params = rl_shopping_cart_all.getLayoutParams();
+        params.height = ScreenUtil.getScreenHeightPx(getApplicationContext())
+                - toolBarPositionY
+                - tv_store_details_life_shopping_cart_title.getHeight()
+//                - tv_store_details_life_shopping_cart_title.getHeight()
+                - tv_store_details_life_shopping_cart_title.getHeight() + 1;
+        rl_shopping_cart_all.setLayoutParams(params);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);//eventbus解绑
+        leftAdapter.removeItemSelectedListener(this);
+    }
+
     @Override
     protected void initData() {
         //列表数据初始化
         initListData();
     }
-
 
     /**
      * 虚拟列表数据
@@ -252,8 +406,8 @@ public class MainActivity extends BaseActivity implements LeftProductTypeAdapter
 
 
         //设置数据源，数据绑定展示
-        leftAdapter = new LeftProductTypeAdapter(MainActivity.this, productListEntities);
-        rightAdapter = new RightProductAdapter(MainActivity.this, productListEntities, shopCart);
+        leftAdapter = new LeftProductTypeAdapter(StoreDetailsLifeActivity.this, productListEntities);
+        rightAdapter = new RightProductAdapter(StoreDetailsLifeActivity.this, productListEntities, shopCart);
 
 
         rightMenu.setAdapter(rightAdapter);
@@ -275,11 +429,29 @@ public class MainActivity extends BaseActivity implements LeftProductTypeAdapter
         headerView.setText(headMenu.getTypeName());
     }
 
+    /**
+     * 显示标题
+     */
+    private void showHeadView() {
+        headerLayout.setTranslationY(0);
+        View underView = rightMenu.findChildViewUnder(headerLayout.getX(), 0);
+        if (underView != null && underView.getContentDescription() != null) {
+            int position = Integer.parseInt(underView.getContentDescription().toString());
+            ProductListEntity entity = rightAdapter.getMenuOfMenuByPosition(position + 1);
+            headMenu = entity;
+            headerView.setText(headMenu.getTypeName());
+            for (int i = 0; i < productListEntities.size(); i++) {
+                if (productListEntities.get(i) == headMenu) {
+                    leftAdapter.setSelectedNum(i);
+                    break;
+                }
+            }
+        }
+    }
+
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        EventBus.getDefault().unregister(this);//eventbus解绑
-        leftAdapter.removeItemSelectedListener(this);
+    protected void savedInstanceState(Bundle savedInstanceState) {
+
     }
 
     /**
@@ -294,7 +466,6 @@ public class MainActivity extends BaseActivity implements LeftProductTypeAdapter
         for (int i = 0; i < position; i++) {
             sum += productListEntities.get(i).getProductEntities().size() + 1;
         }
-//        StickyHeaderLayoutManager layoutManager = (StickyHeaderLayoutManager) rightMenu.getLayoutManager();
         LinearLayoutManager layoutManager = (LinearLayoutManager) rightMenu.getLayoutManager();
         rightMenu.scrollToPosition(position);
         layoutManager.scrollToPositionWithOffset(sum, 0);
@@ -312,12 +483,17 @@ public class MainActivity extends BaseActivity implements LeftProductTypeAdapter
         addCart(view, entity);
     }
 
-    //加入购物车曲线动画
+    /**
+     * 加入购物车曲线动画
+     *
+     * @param view
+     * @param entity
+     */
     private void addCart(View view, ProductListEntity.ProductEntity entity) {
 //   一、创造出执行动画的主题---imageview
         //代码new一个imageview，图片资源是上面的imageview的图片
         // (这个图片就是执行动画的图片，从开始位置出发，经过一个抛物线（贝塞尔曲线），移动到购物车里)
-        final ImageView goods = new ImageView(MainActivity.this);
+        final ImageView goods = new ImageView(StoreDetailsLifeActivity.this);
         goods.setImageDrawable(getResources().getDrawable(R.drawable.shape_shopping_cart_num_bg, null));
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(50, 50);
         rl.addView(goods, params);
@@ -455,53 +631,6 @@ public class MainActivity extends BaseActivity implements LeftProductTypeAdapter
         showTotalPrice(en);
     }
 
-    XPopup popup;
-
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.btn_shopping_cart_pay:
-                //结算的商品列表
-                ToastUtil.showShort(MainActivity.this, "dianjile");
-                if (shopCart.getShoppingSingle().size() > 0) {
-                    List<ProductListEntity.ProductEntity> commitListData = new ArrayList<>();
-                    for (ProductListEntity.ProductEntity m : shopCart.getShoppingSingle().keySet()) {
-                        Log.e("btn_cart_pay", "map集合中存储的数据---->" + m.getProductCount());
-                        commitListData.add(m);
-                    }
-                    for (int i = 0; i < commitListData.size(); i++) {
-                        Log.e("btn_cart_pay_list", "commitList---->" + commitListData.get(i));
-                    }
-                    Log.e("btn_cart_pay_list_JSON", "commitList---->" + JSON.toJSONString(commitListData));
-                }
-
-                break;
-            case R.id.rl_bottom_shopping_cart://打开购物车
-                Log.e("getWindowHeight", "---------height:" + Tool.getWindowHeight(MainActivity.this));
-                //获取屏幕的高度，然后拿到百分之70
-                int popHeight = (int) (Tool.getWindowHeight(MainActivity.this) * 0.7);
-                if (shopCart != null && shopCart.getShoppingAccount() > 0) {
-                    new XPopup.Builder(MainActivity.this)
-                            .atView(view)
-                            .maxHeight(popHeight)
-                            .isRequestFocus(false)
-                            .asCustom(new CustomPartShadowPopupView(MainActivity.this, shopCart))
-                            .show();
-                }
-                break;
-
-            case R.id.btn_shopping_cart_1:
-                startActivity(new Intent(MainActivity.this, StoreDetailsLifeActivity.class));
-                break;
-            case R.id.btn_shopping_cart_2:
-                startActivity(new Intent(MainActivity.this, StoreDetailsOwnerActivity.class));
-                break;
-            default:
-                break;
-        }
-    }
-
-
     /**
      * 清空购物车及左侧列表都角标和商品列表
      */
@@ -524,5 +653,4 @@ public class MainActivity extends BaseActivity implements LeftProductTypeAdapter
             clearCartDataAndListData();
         }
     }
-
 }

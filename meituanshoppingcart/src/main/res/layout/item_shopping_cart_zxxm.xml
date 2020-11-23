@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/right_dish_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <!--车主服务-门店详情-自选项目-单项-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="92dp"
+        android:paddingLeft="15dp">
+        <!--单项图片-->
+        <ImageView
+            android:id="@+id/iv_item_life_product"
+            android:layout_width="62dp"
+            android:layout_height="62dp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="12dp"
+            android:src="@mipmap/ic_launcher" />
+
+        <!--名称-->
+        <TextView
+            android:id="@+id/tv_item_life_product_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="13dp"
+            android:layout_marginRight="30dp"
+            android:layout_toLeftOf="@+id/rl_item_life_product_pay_all"
+            android:layout_toRightOf="@+id/iv_item_life_product"
+            android:ellipsize="end"
+            android:maxLength="15"
+            android:singleLine="true"
+            android:text="新上市猕猴桃"
+            android:textColor="@color/color_222222"
+            android:textSize="12dp" />
+
+        <!--月售-->
+        <TextView
+            android:id="@+id/tv_item_life_product_monty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_item_life_product_name"
+            android:layout_marginTop="7dp"
+            android:layout_marginRight="30dp"
+            android:layout_toLeftOf="@+id/rl_item_life_product_pay_all"
+            android:layout_toRightOf="@+id/iv_item_life_product"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="跟前面的展示方式是一样的只不过字儿可以到这儿"
+            android:textColor="@color/color_999999"
+            android:textSize="10dp"
+            android:visibility="visible" />
+
+        <!--售价-->
+        <TextView
+            android:id="@+id/tv_item_life_product_money_key"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/iv_item_life_product"
+            android:layout_toRightOf="@+id/iv_item_life_product"
+            android:text="¥"
+            android:textColor="@color/color_ff0c0c"
+            android:textSize="9dp" />
+        <!--售价-->
+        <TextView
+            android:id="@+id/tv_item_life_product_money"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/iv_item_life_product"
+            android:layout_marginLeft="2dp"
+            android:layout_marginBottom="-2dp"
+            android:layout_toRightOf="@+id/tv_item_life_product_money_key"
+            android:text="28.8"
+            android:textColor="@color/color_ff0c0c"
+            android:textSize="14dp" />
+
+
+        <!--加减区域-->
+        <RelativeLayout
+            android:id="@+id/rl_item_life_product_pay_all"
+            android:layout_width="36dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="14dp">
+
+            <ImageView
+                android:id="@+id/iv_item_life_product_pay_all"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_centerInParent="true"
+                android:src="@mipmap/iv_shopping_cart_del" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+</LinearLayout>

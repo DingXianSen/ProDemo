@@ -4,8 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:paddingTop="100dp"
     tools:context=".MainActivity">
+
+    <!---->
+    <Button
+        android:id="@+id/btn_shopping_cart_1"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="activity不嵌套fragment的吸顶购物车" />
+    <Button
+        android:id="@+id/btn_shopping_cart_2"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="activity嵌套fragment的吸顶购物车" />
 
     <include layout="@layout/include_shopping_cart" />
 

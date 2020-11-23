@@ -66,8 +66,10 @@ public class LeftProductTypeAdapter extends RecyclerView.Adapter {
         viewHolder.menuName.setText(dishMenu.getTypeName());
         if (mSelectedNum == position) {
             viewHolder.menuLayout.setSelected(true);
+            viewHolder.v_left_menu_item_line.setVisibility(View.VISIBLE);
         } else {
             viewHolder.menuLayout.setSelected(false);
+            viewHolder.v_left_menu_item_line.setVisibility(View.INVISIBLE);
         }
 
         if (dishMenu.getTypeId().equals(mUpdateParentId)) {//选中的ID
@@ -142,12 +144,14 @@ public class LeftProductTypeAdapter extends RecyclerView.Adapter {
         TextView menuName;
         TextView tv_left_menu_count;
         LinearLayout menuLayout;
+        View v_left_menu_item_line;
 
         public LeftMenuViewHolder(final View itemView) {
             super(itemView);
             menuName = (TextView) itemView.findViewById(R.id.left_menu_textview);
             tv_left_menu_count = (TextView) itemView.findViewById(R.id.tv_left_menu_count);
             menuLayout = (LinearLayout) itemView.findViewById(R.id.left_menu_item);
+            v_left_menu_item_line = itemView.findViewById(R.id.v_left_menu_item_line);
             menuLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
